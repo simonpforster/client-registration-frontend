@@ -1,0 +1,27 @@
+@import helper._
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.examplefrontend.model.{UserContactNumber, UserContactNumberForm}
+@this(layout: Layout,govukInput: GovukInput, govukErrorSummary: GovukErrorSummary)
+@(form: Form[UserContactNumber])(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = Some("Enter Contact Number")) {
+<h1 class="govuk-heading-xl" , id="Name Value">Enter Contact Number</h1>
+@if(form.errors.nonEmpty){
+
+<span id="passport-issued-error" class="govuk-error-message">
+          <span class="govuk-visually-hidden">Error:</span> Please enter full Contact Number
+        </span>
+}
+
+<a href="/example-frontend" class="govuk-back-link">Back</a>
+@helper.form(action = uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.SubmitInputContactNumber,'class -> "govuk-body"){
+@if(form.errors("contact").nonEmpty){
+@govukInput(Input(id = "ContactNumber", name = "contactNumber", value = Some(form.data("contactNumber")), label = Label(content = Text("Name Title:")), hint = Some(Hint(content = Text("example: jake"))), errorMessage = Some(ErrorMessage(content = Text("Please provide your First Name and Last Name")))))
+}else{
+@govukInput(Input(id = "ContactNumber", name = "contactNumber", value = Some(form.data("contactNumber")), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("name"))))
+}
+<button class="govuk-button" data-module="govuk-button" type="submit">Next</button>
+}
+
+
+}

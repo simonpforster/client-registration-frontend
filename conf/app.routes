@@ -4,3 +4,18 @@
 ->         /hmrc-frontend           hmrcfrontend.Routes
 GET        /                        uk.gov.hmrc.examplefrontend.controllers.HelloWorldController.helloWorld
 GET        /assets/*file            controllers.Assets.versioned(path = "/public", file: Asset)
+GET        /NameInput               uk.gov.hmrc.examplefrontend.controllers.RegistrationController.InputName
+POST       /NameInput               uk.gov.hmrc.examplefrontend.controllers.RegistrationController.SubmitInputName
+GET        /BusinessInput           uk.gov.hmrc.examplefrontend.controllers.RegistrationController.InputBusinessName
+POST       /BusinessInput           uk.gov.hmrc.examplefrontend.controllers.RegistrationController.SubmitInputBusinessName
+GET        /ContactNumberInput      uk.gov.hmrc.examplefrontend.controllers.RegistrationController.InputContactNumber
+POST       /ContactNumberInput      uk.gov.hmrc.examplefrontend.controllers.RegistrationController.SubmitInputContactNumber
+GET        /PropertyInput           uk.gov.hmrc.examplefrontend.controllers.RegistrationController.InputProperty
+POST       /PropertyInput           uk.gov.hmrc.examplefrontend.controllers.RegistrationController.SubmitInputProperty
+GET        /BusinessType            uk.gov.hmrc.examplefrontend.controllers.RegistrationController.InputBusinessType
+POST       /BusinessType            uk.gov.hmrc.examplefrontend.controllers.RegistrationController.SubmitInputBusinessType
+GET        /PasswordInput           uk.gov.hmrc.examplefrontend.controllers.RegistrationController.InputPassword
+POST       /PasswordInput           uk.gov.hmrc.examplefrontend.controllers.RegistrationController.SubmitInputPassword
+GET        /Summary                 uk.gov.hmrc.examplefrontend.controllers.RegistrationController.Summary
+GET        /SummarySubmit           uk.gov.hmrc.examplefrontend.controllers.RegistrationController.SummarySubmit
+GET        /CRN                     uk.gov.hmrc.examplefrontend.controllers.RegistrationController.CRN
