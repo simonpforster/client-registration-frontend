@@ -142,11 +142,9 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, NameIn
       val password:String = request.session.get("password").get
         val user = User(name,businessName,contactNumber,property.propertyNumber,property.postcode,businessType,password)
 
-      RegistrationConnector.Create(user).map{ client =>
-        client match {
-          case Some(client) => Ok(CRNPage(client)).withSession()
-        }
-
+      RegistrationConnector.Create(user).map {
+        case Some(client) => Ok(CRNPage(client)).withSession("name"-> client.name, "businessName"-> client.businessName,"contactNumber"->client.contactNumber)
+        case _ => BadRequest
       }
     }
 

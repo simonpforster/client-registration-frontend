@@ -13,15 +13,15 @@
         </span>
 }
 
-<a href="/example-frontend" class="govuk-back-link">Back</a>
+<a href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.InputContactNumber" class="govuk-back-link">Back</a>
 @helper.form(action = uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.SubmitInputProperty,'class -> "govuk-body"){
 @if(form.errors("postcode").nonEmpty){
-@govukInput(Input(id = "Postcode", name = "postcode", value = Some(form.data("postcode")), label = Label(content = Text("Name Title:")), hint = Some(Hint(content = Text("example: jake"))), errorMessage = Some(ErrorMessage(content = Text("Please provide your First Name and Last Name")))))
+@govukInput(Input(id = "Postcode", name = "postcode", value = Some(form.data("postcode")), label = Label(content = Text("Postcode:")), hint = Some(Hint(content = Text("example: HA8 NEY"))), errorMessage = Some(ErrorMessage(content = Text("Please provide a valid postcode")))))
 }else{
 @govukInput(Input(id = "Postcode", name = "postcode", value = Some(form.data("postcode")), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("name"))))
 }
 @if(form.errors("propertyNumber").nonEmpty){
-@govukInput(Input(id = "Property Number", name = "propertyNumber", value = Some(form.data("propertyNumber")), label = Label(content = Text("Name Title:")), hint = Some(Hint(content = Text("example: jake"))), errorMessage = Some(ErrorMessage(content = Text("Please provide your First Name and Last Name")))))
+@govukInput(Input(id = "Property Number", name = "propertyNumber", value = Some(form.data("propertyNumber")), label = Label(content = Text("Property Number:")), hint = Some(Hint(content = Text("example: 10"))), errorMessage = Some(ErrorMessage(content = Text("Please provide a valid number")))))
 }else{
 @govukInput(Input(id = "Property Number", name = "propertyNumber", value = Some(form.data("propertyNumber")), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("name"))))
 }
