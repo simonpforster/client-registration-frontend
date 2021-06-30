@@ -16,9 +16,7 @@
         @result.name
       </dd>
       <dd class="govuk-summary-list__actions">
-        <a class="govuk-link" href="/example-frontend/NameInput">
-          Change<span class="govuk-visually-hidden"> name</span>
-        </a>
+
       </dd>
     </div>
 
@@ -30,9 +28,7 @@
         @result.businessName
       </dd>
       <dd class="govuk-summary-list__actions">
-        <a class="govuk-link" href="/example-frontend/EmailInput">
-          Change<span class="govuk-visually-hidden"> date of birth</span>
-        </a>
+
       </dd>
     </div>
 
@@ -44,9 +40,7 @@
         @result.contactNumber
       </dd>
       <dd class="govuk-summary-list__actions">
-        <a class="govuk-link" href="/example-frontend/AgeInput">
-          Change<span class="govuk-visually-hidden"> contact information</span>
-        </a>
+
       </dd>
     </div>
 
@@ -58,9 +52,7 @@
         <p class="govuk-body">@result.propertyNumber @result.postcode</p>
       </dd>
       <dd class="govuk-summary-list__actions">
-        <a class="govuk-link" href="/example-frontend/PasswordInput">
-          Change<span class="govuk-visually-hidden"> contact details</span>
-        </a>
+
       </dd>
     </div>
 
@@ -72,9 +64,7 @@
         <p class="govuk-body">@result.businessType</p>
       </dd>
       <dd class="govuk-summary-list__actions">
-        <a class="govuk-link" href="/example-frontend/PasswordInput">
-          Change<span class="govuk-visually-hidden"> contact details</span>
-        </a>
+
       </dd>
     </div>
 
@@ -86,13 +76,11 @@
         <p class="govuk-body">@result.password</p>
       </dd>
       <dd class="govuk-summary-list__actions">
-        <a class="govuk-link" href="/example-frontend/PasswordInput">
-          Change<span class="govuk-visually-hidden"> contact details</span>
-        </a>
+
       </dd>
     </div>
   </dl>
-  <a href="/example-frontend/PasswordInput" class="govuk-back-link">Back</a>
-  <a class="govuk-button" data-module="govuk-button" id="submitButton" type="submit" href="/example-frontend/SummarySubmit">Submit</a>
+  <a href="/example-frontend/PasswordInput" class="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.InputPassword">Back</a>
+  <a class="govuk-button" data-module="govuk-button" id="submitButton" type="submit" href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.SummarySubmit">Submit</a>
 </form>
 }

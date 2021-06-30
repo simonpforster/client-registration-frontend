@@ -20,8 +20,14 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, post, urlMatching}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.test.Helpers.baseApplicationBuilder.injector
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import uk.gov.hmrc.examplefrontend.Connector.RegistrationConnector
 
-class RegistrationConnector extends WireMockHelper with BeforeAndAfterEach with Matchers{
+import scala.concurrent.Future
+
+class RegistrationConnectorSpec extends WireMockHelper with BeforeAndAfterEach  with  Matchers{
 
   override def beforeEach: Unit = {
     wireMockServer.start()
@@ -34,7 +40,13 @@ class RegistrationConnector extends WireMockHelper with BeforeAndAfterEach with 
 
   "The User" should {
     "send proper request" in {
-      wireMockServer.stubFor(post(urlMatching( s"/create")).willReturn(aResponse().withStatus(201)))
+      wireMockServer.stubFor(post(urlMatching( s"/register")).willReturn(aResponse().withStatus(201)))
+      val result = await(connector.create(user))
+//      result.map{
+//        case Some(client) => client.crn should include "CRN"
+//        case None => None
+//      }
+      result.get.crn should include("CRN")
     }
   }
 

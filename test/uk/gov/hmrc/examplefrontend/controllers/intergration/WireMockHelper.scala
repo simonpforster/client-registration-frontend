@@ -16,22 +16,32 @@
 
 package uk.gov.hmrc.examplefrontend.controllers.intergration
 
+
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import org.scalatest.wordspec.AnyWordSpec
-import play.api.test.Helpers.baseApplicationBuilder.injector
-import uk.gov.hmrc.examplefrontend.model.User
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import uk.gov.hmrc.examplefrontend.Connector.RegistrationConnector
+import uk.gov.hmrc.examplefrontend.model.{Client, User}
 
-trait WireMockHelper extends AnyWordSpec {
+trait WireMockHelper extends AnyWordSpec with GuiceOneAppPerSuite {
 
   val wiremockPort = 8080
   val wiremockHost = "localhost"
-  lazy val connector: RegistrationConnector = injector.instanceOf[RegistrationConnector]
-  val user = User("name","businessName","contactNumber","address","postcode","businessType","password")
 
+  val user = User(name ="name",
+    businessName = "businessName",
+    contactNumber ="contactNumber",
+    propertyNumber = "10",
+    postcode = "postcode",
+    businessType = "businessType",
+    password = "password")
+
+  val client = Client(crn="",name="name",businessName="businessName",contactNumber = "10",propertyNumber = 108,postcode = "HA4", businessType ="SoleTrader",arn = Option(""))
+  val connector: RegistrationConnector = app.injector.instanceOf[RegistrationConnector]
   val url = s"http://$wiremockHost:$wiremockPort"
   lazy val wireMockServer = new WireMockServer(wireMockConfig().port(wiremockPort))
 

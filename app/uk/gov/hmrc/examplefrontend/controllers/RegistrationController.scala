@@ -142,11 +142,18 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, NameIn
       val password:String = request.session.get("password").get
         val user = User(name,businessName,contactNumber,property.propertyNumber,property.postcode,businessType,password)
 
-      RegistrationConnector.Create(user).map {
-        case Some(client) => Ok(CRNPage(client)).withSession("name"-> client.name, "businessName"-> client.businessName,"contactNumber"->client.contactNumber)
+      RegistrationConnector.create(user).map {
+        case Some(client) => Ok(CRNPage(client)).withSession("crn"->client.crn)
         case _ => BadRequest
+
       }
     }
 
-    def CRN: Action[AnyContent] = TODO
+     def home: Action[AnyContent] = Action  {implicit request =>
+       Redirect("http://localhost:9008/example-frontend/")
+     }
+
+    def dashboard: Action[AnyContent] = Action {implicit request =>
+      Redirect("http://localhost:9008/example-frontend/dashboard")
+    }
   }
