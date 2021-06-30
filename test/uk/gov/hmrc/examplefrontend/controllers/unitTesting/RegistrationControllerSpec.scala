@@ -30,13 +30,13 @@ import uk.gov.hmrc.examplefrontend.views.html.{BusinessNameInputPage, BusinessTy
 
 class RegistrationControllerSpec extends AbstractTest {
 
+
+  private val fakeRequestSummary: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET","/Summary").withSession("name"->"jake","businessName"->"jakeBusiness","contactNumber"->"000","property"->"postcode/propertyNumber","businessType"->"testbusinessType","password"->"testpassword")
   private val fakeRequestName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET","/NameInput").withSession()
-  private val fakeRequestSummary: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET","/Summary").withSession("name"->"jake","businessName"->"jakeBusiness","contactNumber"->"000","address"->"testadress","postcode"->"testpostcode","businessType"->"businessType","password"->"testpassword")
+  private val fakeRequestSubmitProperty:FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET","/property-input").withSession("property"->"postcode/propertyNumber")
   private val fakeRequestSubmitName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET","/NameInput").withSession("name"-> "jake")
   private val fakeRequestSubmitBusinessName:FakeRequest[AnyContentAsEmpty.type] = FakeRequest("POST","/BusinessNameInput")
   private val user:User = User("TestFullName","TestNameOfBusiness","TestContactNumber","TestPropertyNumber","TestAddress","TestPostCode","TestPassword")
-
-
 
   val name:NameInputPage = app.injector.instanceOf(classOf[NameInputPage])
   val businessName:BusinessNameInputPage = app.injector.instanceOf(classOf[BusinessNameInputPage])
@@ -169,13 +169,13 @@ class RegistrationControllerSpec extends AbstractTest {
 
   "POST/SubmitPropertyInput" should{
     "retutn 303" in {
-      val result = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("propertyNumber" -> "10", "address" -> "London"))
+      val result = controller.SubmitInputProperty(fakeRequestSubmitProperty.withFormUrlEncodedBody("propertyNumber" -> "10", "postcode" -> "London"))
       status(result) shouldBe 303
     }
     "return html" in{
-      val result = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("propertyNumber" -> "10", "address" -> "London"))
+      val result = controller.SubmitInputProperty(fakeRequestSubmitProperty.withFormUrlEncodedBody("propertyNumber" -> "10", "postcode" -> "London"))
       val doc=Jsoup.parse(contentAsString(result))
-      doc.getElementById("PropertyNumberValue")
+      doc.getElementById("businessType1")
     }
   }
 

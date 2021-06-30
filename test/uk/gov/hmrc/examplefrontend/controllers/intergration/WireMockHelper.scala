@@ -32,18 +32,27 @@ trait WireMockHelper extends AnyWordSpec with GuiceOneAppPerSuite {
   val wiremockPort = 8080
   val wiremockHost = "localhost"
 
-  val user = User(name ="name",
+  val user: User = User(name = "name",
     businessName = "businessName",
-    contactNumber ="contactNumber",
+    contactNumber = "contactNumber",
     propertyNumber = "10",
     postcode = "postcode",
     businessType = "businessType",
     password = "password")
 
-  val client = Client(crn="",name="name",businessName="businessName",contactNumber = "10",propertyNumber = 108,postcode = "HA4", businessType ="SoleTrader",arn = Option(""))
+  val client: Client = Client(
+    crn = "",
+    name = "name",
+    businessName = "businessName",
+    contactNumber = "10",
+    propertyNumber = 108,
+    postcode = "HA4",
+    businessType = "SoleTrader",
+    arn = Option(""))
+
   val connector: RegistrationConnector = app.injector.instanceOf[RegistrationConnector]
-  val url = s"http://$wiremockHost:$wiremockPort"
-  lazy val wireMockServer = new WireMockServer(wireMockConfig().port(wiremockPort))
+  val url: String = s"http://$wiremockHost:$wiremockPort"
+  lazy val wireMockServer: WireMockServer = new WireMockServer(wireMockConfig().port(wiremockPort))
 
   def startWiremock(): Unit = {
     wireMockServer.start()

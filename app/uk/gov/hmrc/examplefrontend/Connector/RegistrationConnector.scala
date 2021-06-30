@@ -23,18 +23,16 @@ import uk.gov.hmrc.examplefrontend.model.{Client, User}
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ExecutionContext, Future}
 
 class RegistrationConnector @Inject() (ws:WSClient, val controllerComponents: ControllerComponents, val ec: ExecutionContext) {
 
-  val backend = "http://localhost:9006"
-  val loginFrontEnd = "http://localhost:9008"
+  val backend: String = "http://localhost:9006"
+  val loginFrontEnd:String = "http://localhost:9008"
 
   def wspost(url:String, jsObject: JsObject):Future[WSResponse] = {
       ws.url(backend+url).post(jsObject)
   }
-
   def create(user:User):Future[Option[Client]] ={
     val newUser:JsObject = Json.obj(
       "name" -> user.name,
@@ -47,9 +45,4 @@ class RegistrationConnector @Inject() (ws:WSClient, val controllerComponents: Co
     )
     wspost("/register",newUser).map{x => Json.fromJson[Client](x.json).asOpt}
   }
-
-  def wsgetFrontEnd(url: String): Future[WSResponse] = {
-    ws.url(loginFrontEnd+url).withRequestTimeout(5000.millis).get()
-  }
-
 }

@@ -102,7 +102,13 @@ object UserPasswordForm{
 
 }
 
-case class User(name:String,businessName:String,contactNumber:String,propertyNumber:String,postcode:String,businessType:String,password:String)
+case class User(name:String,
+                businessName:String,
+                contactNumber:String,
+                propertyNumber:String,
+                postcode:String,
+                businessType:String,
+                password:String)
 
 object UserForm{
   val submitForm:Form[User] =

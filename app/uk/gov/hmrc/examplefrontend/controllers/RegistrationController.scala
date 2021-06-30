@@ -143,7 +143,7 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, NameIn
         val user = User(name,businessName,contactNumber,property.propertyNumber,property.postcode,businessType,password)
 
       RegistrationConnector.create(user).map {
-        case Some(client) => Ok(CRNPage(client)).withSession("crn"->client.crn)
+        case Some(client) => Ok(CRNPage(client)).withSession("crn"->client.crn ,"name"->client.name)
         case _ => BadRequest
 
       }

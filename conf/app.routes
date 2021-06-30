@@ -2,14 +2,13 @@
 
 ->         /govuk-frontend          govuk.Routes
 ->         /hmrc-frontend           hmrcfrontend.Routes
-GET        /                        uk.gov.hmrc.examplefrontend.controllers.HelloWorldController.helloWorld
 GET        /assets/*file            controllers.Assets.versioned(path = "/public", file: Asset)
 GET        /name-input               uk.gov.hmrc.examplefrontend.controllers.RegistrationController.InputName
 POST       /name-input               uk.gov.hmrc.examplefrontend.controllers.RegistrationController.SubmitInputName
 GET        /business-input           uk.gov.hmrc.examplefrontend.controllers.RegistrationController.InputBusinessName
 POST       /business-input           uk.gov.hmrc.examplefrontend.controllers.RegistrationController.SubmitInputBusinessName
-GET        /contact-number-input      uk.gov.hmrc.examplefrontend.controllers.RegistrationController.InputContactNumber
-POST       /contact-number-input      uk.gov.hmrc.examplefrontend.controllers.RegistrationController.SubmitInputContactNumber
+GET        /contact-number-input     uk.gov.hmrc.examplefrontend.controllers.RegistrationController.InputContactNumber
+POST       /contact-number-input     uk.gov.hmrc.examplefrontend.controllers.RegistrationController.SubmitInputContactNumber
 GET        /property-input           uk.gov.hmrc.examplefrontend.controllers.RegistrationController.InputProperty
 POST       /property-input           uk.gov.hmrc.examplefrontend.controllers.RegistrationController.SubmitInputProperty
 GET        /business-type            uk.gov.hmrc.examplefrontend.controllers.RegistrationController.InputBusinessType
