@@ -32,4 +32,9 @@ lazy val microservice = Project(appName, file("."))
   .settings(integrationTestSettings(): _*)
   .settings(resolvers += Resolver.jcenterRepo)
 
+libraryDependencies += "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.3"
+
+libraryDependencies += "com.github.tomakehurst" % "wiremock-jre8" % "2.27.1"
+
+libraryDependencies += "org.scalatestplus" %% "mockito-3-4" % "3.2.5.0" % "test"
 PlayKeys .devSettings := Seq ("play.server.http.port" -> "9007")

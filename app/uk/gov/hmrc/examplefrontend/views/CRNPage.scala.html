@@ -1,0 +1,91 @@
+@import helper._
+@import uk.gov.hmrc.examplefrontend.model.{Client}
+@this(layout: Layout)
+@(result: Client)(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = Some("One Person")) {
+
+
+<h1 class="govuk-heading-xl">Successfully Added User:</h1>
+
+
+<div class="govuk-width-container">
+  <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-panel govuk-panel--confirmation">
+          <h1 class="govuk-panel__title">
+            Application complete
+          </h1>
+          <div class="govuk-panel__body">
+            Your reference number<br><strong>@result.crn</strong>
+          </div>
+        </div>
+
+        <p class="govuk-body">We have sent you a confirmation email.</p>
+        <p class="govuk-body">Please Remeber this Number as it will be used for authentication.</p>
+</div>
+
+
+
+<form action="example/NameInput">
+
+  <dl class="govuk-summary-list">
+    <h4 class="govuk-heading-l">Your details:</h4>
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Name
+      </dt>
+      <dd class="govuk-summary-list__value" id="NameValue">
+        @result.name
+    </div>
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Business Name
+      </dt>
+      <dd class="govuk-summary-list__value" id="EmailValue">
+        @result.businessName
+      </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Contact Number:
+      </dt>
+      <dd class="govuk-summary-list__value" id="ContactValue">
+        @result.contactNumber
+      </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Property
+      </dt>
+      <dd class="govuk-summary-list__value" id="PropertyValue">
+        <p class="govuk-body">@result.propertyNumber @result.postcode</p>
+      </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Business Type
+        </dt>
+        <dd class="govuk-summary-list__value" id="PasswordValue">
+          <p class="govuk-body">@result.businessType</p>
+        </dd>
+    </div>
+  </dl>
+</form>
+    </div>
+  </main>
+</div>
+
+<div class="govuk-button-group">
+  <a class="govuk-button" data-module="govuk-button" href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.dashboard">
+    Continue
+  </a>
+  <a class="govuk-link" href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.home">Cancel</a>
+</div>
+}
