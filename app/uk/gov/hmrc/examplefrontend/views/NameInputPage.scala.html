@@ -18,7 +18,7 @@
 @if(form.errors("name").nonEmpty){
 @govukInput(Input(id = "name", name = "name", value = Some(form.data("name")), label = Label(content = Text("Name Title:")), hint = Some(Hint(content = Text("example: jake"))), errorMessage = Some(ErrorMessage(content = Text("Please provide your First Name and Last Name")))))
 }else{
-@govukInput(Input(id = "name", name = "name", value = Some(form.data("name")), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("name"))))
+@govukInput(Input(id = "name", name = "name", value = Some(form.data("name")), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("Name"))))
 }
 <button class="govuk-button" data-module="govuk-button" type="submit">Next</button>
 }

@@ -4,7 +4,7 @@
 @this(layout: Layout,govukInput: GovukInput, govukErrorSummary: GovukErrorSummary)
 @(form: Form[UserProperty])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some("Enter Name")) {
+@layout(pageTitle = Some("Enter Address")) {
 <h1 class="govuk-heading-xl", id="Name Value">Enter Property number and address</h1>
 @if(form.errors.nonEmpty){
 <span id="passport-issued-error" class="govuk-error-message">

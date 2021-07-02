@@ -4,7 +4,7 @@
 @this(layout: Layout,govukInput: GovukInput, govukErrorSummary: GovukErrorSummary)
 @(form: Form[UserBusinessType])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some("Enter Business Name")) {
+@layout(pageTitle = Some("Select Business Type")) {
 <h1 class="govuk-heading-xl", id="Name Value">Please select your business type:</h1>
 @if(form.errors.nonEmpty){
 
