@@ -15,9 +15,9 @@
 <a href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.InputName" class="govuk-back-link">Back</a>
 @helper.form(action = uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.SubmitInputBusinessName,'class -> "govuk-body"){
 @if(form.errors("businessName").nonEmpty){
-@govukInput(Input(id = "businessName", name = "businessName", value = Some(form.data("businessName")), label = Label(content = Text("Business Name:")), hint = Some(Hint(content = Text("example: Apple"))), errorMessage = Some(ErrorMessage(content = Text("Please provide your company name")))))
+    @govukInput(Input(id = "business-name", name = "businessName", value = Some(form.data("businessName")), label = Label(content = Text("Business Name:")), hint = Some(Hint(content = Text("example: Apple"))), errorMessage = Some(ErrorMessage(content = Text("Please provide your company name")))))
 }else{
-@govukInput(Input(id = "businessName", name = "businessName", value = Some(form.data("businessName")), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("Business name"))))
+    @govukInput(Input(id = "business-name", name = "businessName", value = Some(form.data("businessName")), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("Business Name:"))))
 }
 <button class="govuk-button" data-module="govuk-button" type="submit">Next</button>
 }
