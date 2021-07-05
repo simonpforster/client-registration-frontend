@@ -184,13 +184,12 @@ class RegistrationControllerSpec extends AbstractTest {
     }
   }
 
-  "Redirect Dashboard" should{
-    "return 303" in{
-      val result:Future[Result] = controller.dashboard(fakeRequestName)
+  "Redirect Dashboard" should {
+    "return 303" in {
+      val result: Future[Result] = controller.dashboard(fakeRequestName)
       status(result) shouldBe 303
     }
   }
-
 
 
   "POST/SubmitNameInput" should {
@@ -203,8 +202,8 @@ class RegistrationControllerSpec extends AbstractTest {
       val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("BusinessNameValue")
     }
-    "return Badrequest" in{
-      val result: Future[Result] = controller.SubmitInputName(fakeRequestSubmitName.withFormUrlEncodedBody("name"->""))
+    "return Badrequest" in {
+      val result: Future[Result] = controller.SubmitInputName(fakeRequestSubmitName.withFormUrlEncodedBody("name" -> ""))
       status(result) shouldBe 400
     }
   }
@@ -220,8 +219,8 @@ class RegistrationControllerSpec extends AbstractTest {
       doc.getElementById("BusinessNameValue")
       session(result).get("businessName").getOrElse("") shouldBe "Jake"
     }
-    "return Badrequest" in{
-      val result: Future[Result] = controller.SubmitInputBusinessName(fakeRequestSubmitName.withFormUrlEncodedBody("businessName"->""))
+    "return Badrequest" in {
+      val result: Future[Result] = controller.SubmitInputBusinessName(fakeRequestSubmitName.withFormUrlEncodedBody("businessName" -> ""))
       status(result) shouldBe 400
     }
   }
@@ -237,8 +236,8 @@ class RegistrationControllerSpec extends AbstractTest {
       doc.getElementById("PropertyNumberValue")
       session(result).get("contactNumber").getOrElse("") shouldBe "000"
     }
-    "return Badrequest" in{
-      val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("contactNumber"->""))
+    "return Badrequest" in {
+      val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("contactNumber" -> ""))
       status(result) shouldBe 400
     }
   }
@@ -253,23 +252,23 @@ class RegistrationControllerSpec extends AbstractTest {
       val doc = Jsoup.parse(contentAsString(result))
       doc.getElementById("businessType1")
     }
-    "return Badrequest" in{
-      val result: Future[Result] = controller.SubmitInputProperty(fakeRequestSubmitName.withFormUrlEncodedBody("propertyNumber"->"", "postcode"->""))
+    "return Badrequest" in {
+      val result: Future[Result] = controller.SubmitInputProperty(fakeRequestSubmitName.withFormUrlEncodedBody("propertyNumber" -> "", "postcode" -> ""))
       status(result) shouldBe 400
     }
   }
 
   "POST/SubmitInputBusinessType" should {
     "retutn 303" in {
-      val result = controller.SubmitInputBusinessType(fakeRequestSubmitProperty.withFormUrlEncodedBody("businessType"->"other"))
+      val result = controller.SubmitInputBusinessType(fakeRequestSubmitProperty.withFormUrlEncodedBody("businessType" -> "other"))
       status(result) shouldBe 303
     }
     "return html" in {
-      val result = controller.SubmitInputBusinessType(fakeRequestSubmitProperty.withFormUrlEncodedBody("businessType"->"other"))
+      val result = controller.SubmitInputBusinessType(fakeRequestSubmitProperty.withFormUrlEncodedBody("businessType" -> "other"))
       val doc = Jsoup.parse(contentAsString(result))
       doc.getElementById("password")
     }
-    "return Badrequest" in{
+    "return Badrequest" in {
       val result: Future[Result] = controller.SubmitInputBusinessType(fakeRequestSubmitName.withFormUrlEncodedBody())
       status(result) shouldBe 400
     }
@@ -286,8 +285,8 @@ class RegistrationControllerSpec extends AbstractTest {
       doc.getElementById("NameValue")
       session(result).get("password").getOrElse("") shouldBe "pass"
     }
-    "return Badrequest" in{
-      val result: Future[Result] = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password"->""))
+    "return Badrequest" in {
+      val result: Future[Result] = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password" -> ""))
       status(result) shouldBe 400
     }
   }
