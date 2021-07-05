@@ -5,12 +5,12 @@
 @(form: Form[UserBusinessName])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Enter Business Name")) {
-<h1 class="govuk-heading-xl", id="Name Value">Enter Business Name</h1>
+<h1 class="govuk-heading-xl" id="Name Value">Enter Business Name</h1>
 @if(form.errors.nonEmpty){
 
 <span id="passport-issued-error" class="govuk-error-message">
-          <span class="govuk-visually-hidden">Error:</span> Please enter your business name in the field below.
-        </span>
+    <span class="govuk-visually-hidden">Error:</span> Please enter your business name in the field below.
+</span>
 }
 <a href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.InputName" class="govuk-back-link">Back</a>
 @helper.form(action = uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.SubmitInputBusinessName,'class -> "govuk-body"){

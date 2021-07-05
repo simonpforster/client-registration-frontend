@@ -25,24 +25,25 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
-class RegistrationConnector @Inject() (ws:WSClient, val controllerComponents: ControllerComponents, val ec: ExecutionContext) {
+class RegistrationConnector @Inject()(ws: WSClient, val controllerComponents: ControllerComponents, val ec: ExecutionContext) {
 
   val backend: String = "http://localhost:9006"
-  val loginFrontEnd:String = "http://localhost:9008"
+  val loginFrontEnd: String = "http://localhost:9008"
 
-  def wspost(url:String, jsObject: JsObject):Future[WSResponse] = {
-      ws.url(backend+url).post(jsObject)
+  def wspost(url: String, jsObject: JsObject): Future[WSResponse] = {
+    ws.url(backend + url).post(jsObject)
   }
-  def create(user:User):Future[Option[Client]] ={
-    val newUser:JsObject = Json.obj(
+
+  def create(user: User): Future[Option[Client]] = {
+    val newUser: JsObject = Json.obj(
       "name" -> user.name,
       "businessName" -> user.businessName,
-      "contactNumber"->user.contactNumber,
-      "propertyNumber"->user.propertyNumber.toInt,
-      "postcode"->user.postcode,
-      "businessType"->user.businessType,
+      "contactNumber" -> user.contactNumber,
+      "propertyNumber" -> user.propertyNumber.toInt,
+      "postcode" -> user.postcode,
+      "businessType" -> user.businessType,
       "password" -> user.password
     )
-    wspost("/register",newUser).map{x => Json.fromJson[Client](x.json).asOpt}
+    wspost(url = "/register", jsObject = newUser).map { x => Json.fromJson[Client](x.json).asOpt }
   }
 }
