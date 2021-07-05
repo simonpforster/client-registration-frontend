@@ -134,12 +134,12 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, NameIn
     }
 
     def SummarySubmit: Action[AnyContent] = Action async { implicit request =>
-      val name:String = request.session.get("name").get
-      val businessName:String = request.session.get("businessName").get
-      val contactNumber:String = request.session.get("contactNumber").get
+      val name:String = request.session.get("name").getOrElse("")
+      val businessName:String = request.session.get("businessName").getOrElse("")
+      val contactNumber:String = request.session.get("contactNumber").getOrElse("")
       val property:UserProperty = UserProperty.decode(request.session.get("property").getOrElse(""))
-      val businessType:String = request.session.get("businessType").get
-      val password:String = request.session.get("password").get
+      val businessType:String = request.session.get("businessType").getOrElse("")
+      val password:String = request.session.get("password").getOrElse("")
         val user = User(name,businessName,contactNumber,property.propertyNumber,property.postcode,businessType,password)
 
       RegistrationConnector.create(user).map {
