@@ -35,13 +35,34 @@ import scala.concurrent.Future
 class RegistrationControllerSpec extends AbstractTest {
 
 
-  private val fakeRequestSummary: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/Summary").withSession("name" -> "jake", "businessName" -> "jakeBusiness", "contactNumber" -> "000", "property" -> "postcode/propertyNumber", "businessType" -> "testbusinessType", "password" -> "testpassword")
-  private val fakeRequestSubmitSummary: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/SubmitSummary")
-  private val fakeRequestName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/NameInput").withSession()
+  private val fakeRequestSummary: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
+    method = "GET",
+    path = "/Summary")
+    .withSession(
+      "name" -> "jake",
+      "businessName" -> "jakeBusiness",
+      "contactNumber" -> "000",
+      "property" -> "postcode/propertyNumber",
+      "businessType" -> "testbusinessType",
+      "password" -> "testpassword")
+  private val fakeRequestSubmitSummary: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
+    method = "GET",
+    path = "/SubmitSummary")
+  private val fakeRequestName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
+    method = "GET",
+    path = "/NameInput")
 
-  private val fakeRequestSubmitProperty: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/property-input").withSession("property" -> "postcode/propertyNumber")
-  private val fakeRequestSubmitName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/NameInput").withSession("name" -> "jake")
-  private val fakeRequestSubmitBusinessName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("POST", "/BusinessNameInput")
+  private val fakeRequestSubmitProperty: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
+    method = "GET",
+    path = "/property-input")
+    .withSession(
+      "property" -> "postcode/propertyNumber")
+  private val fakeRequestSubmitName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
+    method = "GET",
+    path = "/NameInput").withSession("name" -> "jake")
+  private val fakeRequestSubmitBusinessName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
+    method = "POST",
+    path = "/BusinessNameInput")
 
 
   val name: NameInputPage = app.injector.instanceOf(classOf[NameInputPage])
@@ -55,25 +76,25 @@ class RegistrationControllerSpec extends AbstractTest {
   val connector: RegistrationConnector = mock(classOf[RegistrationConnector])
 
   private val controller = new RegistrationController(
-    Helpers.stubMessagesControllerComponents(),
-    name,
-    businessName,
-    contactNumber,
-    property,
-    businessType,
-    password,
-    result,
-    connector,
-    crn)
+    mcc = Helpers.stubMessagesControllerComponents(),
+    NameInputPage = name,
+    BusinessNameInputPage = businessName,
+    ContactNumberInputPage = contactNumber,
+    PropertyInputPage = property,
+    BusinessTypeInputPage = businessType,
+    PasswordInputPage = password,
+    ResultPage = result,
+    RegistrationConnector = connector,
+    CRNPage = crn)
 
   private val user: User = User(
-    "TestFullName",
-    "TestNameOfBusiness",
-    "TestContactNumber",
-    "TestPropertyNumber",
-    "TestAddress",
-    "TestPostCode",
-    "TestPassword")
+    name = "TestFullName",
+    businessName = "TestNameOfBusiness",
+    contactNumber = "TestContactNumber",
+    propertyNumber = "TestPropertyNumber",
+    postcode = "TestAddress",
+    businessType = "TestPostCode",
+    password = "TestPassword")
   private val client: Client = Client(
     crn = "CRN",
     name = "TestFullName",
@@ -123,7 +144,7 @@ class RegistrationControllerSpec extends AbstractTest {
     }
   }
 
-  "GET/BusinesssType" should {
+  "GET/BusinessType" should {
     "return 200" in {
       val result: Future[Result] = controller.InputBusinessType(fakeRequestName)
       status(result) shouldBe 200
@@ -193,7 +214,7 @@ class RegistrationControllerSpec extends AbstractTest {
 
 
   "POST/SubmitNameInput" should {
-    "retutn 303" in {
+    "return 303" in {
       val result: Future[Result] = controller.SubmitInputName(fakeRequestSubmitName.withFormUrlEncodedBody("name" -> "Jake"))
       status(result) shouldBe 303
     }
@@ -202,14 +223,14 @@ class RegistrationControllerSpec extends AbstractTest {
       val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("BusinessNameValue")
     }
-    "return Badrequest" in {
+    "return Bad Request" in {
       val result: Future[Result] = controller.SubmitInputName(fakeRequestSubmitName.withFormUrlEncodedBody("name" -> ""))
       status(result) shouldBe 400
     }
   }
 
   "POST/SubmitBusinessNameInput" should {
-    "retutn 303" in {
+    "return 303" in {
       val result: Future[Result] = controller.SubmitInputBusinessName(fakeRequestSubmitBusinessName.withFormUrlEncodedBody("businessName" -> "Jake"))
       status(result) shouldBe 303
     }
@@ -219,14 +240,14 @@ class RegistrationControllerSpec extends AbstractTest {
       doc.getElementById("BusinessNameValue")
       session(result).get("businessName").getOrElse("") shouldBe "Jake"
     }
-    "return Badrequest" in {
+    "return Bad Request" in {
       val result: Future[Result] = controller.SubmitInputBusinessName(fakeRequestSubmitName.withFormUrlEncodedBody("businessName" -> ""))
       status(result) shouldBe 400
     }
   }
 
   "POST/SubmitContactInput" should {
-    "retutn 303" in {
+    "return 303" in {
       val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("contactNumber" -> "000"))
       status(result) shouldBe 303
     }
@@ -236,14 +257,14 @@ class RegistrationControllerSpec extends AbstractTest {
       doc.getElementById("PropertyNumberValue")
       session(result).get("contactNumber").getOrElse("") shouldBe "000"
     }
-    "return Badrequest" in {
+    "return Bad Request" in {
       val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("contactNumber" -> ""))
       status(result) shouldBe 400
     }
   }
 
   "POST/SubmitPropertyInput" should {
-    "retutn 303" in {
+    "return 303" in {
       val result = controller.SubmitInputProperty(fakeRequestSubmitProperty.withFormUrlEncodedBody("propertyNumber" -> "10", "postcode" -> "London"))
       status(result) shouldBe 303
     }
@@ -252,14 +273,14 @@ class RegistrationControllerSpec extends AbstractTest {
       val doc = Jsoup.parse(contentAsString(result))
       doc.getElementById("businessType1")
     }
-    "return Badrequest" in {
+    "return Bad Request" in {
       val result: Future[Result] = controller.SubmitInputProperty(fakeRequestSubmitName.withFormUrlEncodedBody("propertyNumber" -> "", "postcode" -> ""))
       status(result) shouldBe 400
     }
   }
 
   "POST/SubmitInputBusinessType" should {
-    "retutn 303" in {
+    "return 303" in {
       val result = controller.SubmitInputBusinessType(fakeRequestSubmitProperty.withFormUrlEncodedBody("businessType" -> "other"))
       status(result) shouldBe 303
     }
@@ -268,14 +289,14 @@ class RegistrationControllerSpec extends AbstractTest {
       val doc = Jsoup.parse(contentAsString(result))
       doc.getElementById("password")
     }
-    "return Badrequest" in {
+    "return Bad Request" in {
       val result: Future[Result] = controller.SubmitInputBusinessType(fakeRequestSubmitName.withFormUrlEncodedBody())
       status(result) shouldBe 400
     }
   }
 
   "POST/SubmitPasswordInput" should {
-    "retutn 303" in {
+    "return 303" in {
       val result = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password" -> "pass"))
       status(result) shouldBe 303
     }
@@ -285,19 +306,19 @@ class RegistrationControllerSpec extends AbstractTest {
       doc.getElementById("NameValue")
       session(result).get("password").getOrElse("") shouldBe "pass"
     }
-    "return Badrequest" in {
+    "return Bad Request" in {
       val result: Future[Result] = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password" -> ""))
       status(result) shouldBe 400
     }
   }
 
   "POST/SubmitSummary" should {
-    "retutn 303" in {
+    "return 303" in {
       when(connector.create(any())) thenReturn Future.successful(Some(client))
       val result: Future[Result] = controller.SummarySubmit(fakeRequestSubmitSummary.withSession("name" -> user.name, "businessName" -> user.businessName, "contactNumber" -> user.contactNumber, "businessType" -> user.businessType, "password" -> user.password, "property" -> (user.propertyNumber + "/" + user.postcode)))
       status(result) shouldBe 200
     }
-    "retutn BADREQUEST" in {
+    "return Bad Request" in {
       when(connector.create(any())) thenReturn Future.successful(None)
       val result: Future[Result] = controller.SummarySubmit(fakeRequestSubmitSummary.withSession("name" -> user.name, "businessName" -> user.businessName, "contactNumber" -> user.contactNumber, "businessType" -> user.businessType, "password" -> user.password, "property" -> (user.propertyNumber + "/" + user.postcode)))
       status(result) shouldBe 400

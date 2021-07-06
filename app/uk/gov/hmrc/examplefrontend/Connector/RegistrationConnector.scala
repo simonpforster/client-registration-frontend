@@ -44,6 +44,6 @@ class RegistrationConnector @Inject()(ws: WSClient, val controllerComponents: Co
       "businessType" -> user.businessType,
       "password" -> user.password
     )
-    wspost("/register", newUser).map { x => Json.fromJson[Client](x.json).asOpt }
+    wspost(url = "/register", jsObject = newUser).map { x => Json.fromJson[Client](x.json).asOpt }
   }
 }

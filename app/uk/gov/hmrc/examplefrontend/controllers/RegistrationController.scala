@@ -24,10 +24,8 @@ import uk.gov.hmrc.examplefrontend.Connector.RegistrationConnector
 import uk.gov.hmrc.examplefrontend.model._
 import uk.gov.hmrc.examplefrontend.views.html._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
-
 
 class RegistrationController @Inject()(mcc: MessagesControllerComponents, NameInputPage: NameInputPage, BusinessNameInputPage: BusinessNameInputPage, ContactNumberInputPage: ContactNumberInputPage, PropertyInputPage: PropertyInputPage, BusinessTypeInputPage: BusinessTypeInputPage, PasswordInputPage: PasswordInputPage, ResultPage: ResultPage, RegistrationConnector: RegistrationConnector, CRNPage: CRNPage) extends FrontendController(mcc) with I18nSupport {
 

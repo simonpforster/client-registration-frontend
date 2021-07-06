@@ -49,7 +49,7 @@
         Property
       </dt>
       <dd class="govuk-summary-list__value" id="property-value">
-        <p class="govuk-body">@result.propertyNumber @result.postcode</p>
+        <p class="govuk-body">@result.propertyNumber , @result.postcode</p>
       </dd>
       <dd class="govuk-summary-list__actions">
 
@@ -68,17 +68,6 @@
       </dd>
     </div>
 
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        Password
-      </dt>
-      <dd class="govuk-summary-list__value" id="password-value">
-        <p class="govuk-body">@result.password</p>
-      </dd>
-      <dd class="govuk-summary-list__actions">
-
-      </dd>
-    </div>
   </dl>
   <a  href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.InputPassword">Back</a>
   <a class="govuk-button" data-module="govuk-button" id="submit" type="submit" href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.SummarySubmit">Submit</a>
