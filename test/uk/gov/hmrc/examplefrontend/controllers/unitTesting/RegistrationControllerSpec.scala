@@ -77,6 +77,7 @@ class RegistrationControllerSpec extends AbstractTest {
 
   private val controller = new RegistrationController(
     mcc = Helpers.stubMessagesControllerComponents(),
+
     nameInputPage = name,
     businessNameInputPage = businessName,
     contactNumberInputPage = contactNumber,
@@ -248,14 +249,15 @@ class RegistrationControllerSpec extends AbstractTest {
 
   "POST/SubmitContactInput" should {
     "return 303" in {
-      val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("contactNumber" -> "000"))
+      val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("contactNumber" -> "01895635898"))
       status(result) shouldBe 303
     }
     "return html" in {
-      val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("contactNumber" -> "000"))
+      val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("contactNumber" -> "01895635898"))
       val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("PropertyNumberValue")
-      session(result).get("contactNumber").getOrElse("") shouldBe "000"
+      session(result).get("contactNumber").getOrElse("") shouldBe "01895635898"
+
     }
     "return Bad Request" in {
       val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("contactNumber" -> ""))

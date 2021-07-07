@@ -18,6 +18,7 @@ package uk.gov.hmrc.examplefrontend.controllers
 
 
 import play.api.data.Form
+import play.api.data.validation.{Constraint, Invalid, ValidationError}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.examplefrontend.Connector.RegistrationConnector
@@ -27,7 +28,9 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 
+
 class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameInputPage: NameInputPage, businessNameInputPage: BusinessNameInputPage, contactNumberInputPage: ContactNumberInputPage, propertyInputPage: PropertyInputPage, businessTypeInputPage: BusinessTypeInputPage, passwordInputPage: PasswordInputPage, resultPage: ResultPage, registrationConnector: RegistrationConnector, crnPage: CRNPage) extends FrontendController(mcc) with I18nSupport {
+
 
   def InputName: Action[AnyContent] = Action { implicit request =>
     val form: Form[UserName] = request.session.get("name").fold(UserNameForm.submitForm.fill(UserName(""))) { name =>
@@ -66,6 +69,7 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
   }
 
   def SubmitInputContactNumber: Action[AnyContent] = Action { implicit request =>
+
     UserContactNumberForm.submitForm.bindFromRequest().fold({ formWithErrors =>
       BadRequest(contactNumberInputPage(formWithErrors))
     }, { formData =>
@@ -132,6 +136,7 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
     val result = User(name, business, contact, property.propertyNumber, property.postcode, businessType, password)
 
     Ok(resultPage(result))
+
   }
 
   def SummarySubmit: Action[AnyContent] = Action async { implicit request =>

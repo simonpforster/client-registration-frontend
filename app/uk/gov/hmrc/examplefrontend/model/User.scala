@@ -48,7 +48,7 @@ object UserContactNumberForm {
   val submitForm: Form[UserContactNumber] =
     Form(
       mapping(
-        "contactNumber" -> nonEmptyText
+        "contactNumber" -> nonEmptyText(minLength = 10)
       )(UserContactNumber.apply)(UserContactNumber.unapply)
     )
 }
@@ -90,7 +90,9 @@ object UserBusinessTypeForm {
     )
 }
 
+
 case class UserPassword(password: String, passwordCheck: String)
+
 
 object UserPasswordForm {
   val submitForm: Form[UserPassword] =
