@@ -18,6 +18,7 @@ package uk.gov.hmrc.examplefrontend.controllers
 
 
 import play.api.data.Form
+import play.api.data.validation.{Constraint, Invalid, ValidationError}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.examplefrontend.Connector.RegistrationConnector
@@ -28,8 +29,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 
-
-class RegistrationController @Inject()(mcc: MessagesControllerComponents, NameInputPage: NameInputPage, BusinessNameInputPage: BusinessNameInputPage, ContactNumberInputPage: ContactNumberInputPage, PropertyInputPage: PropertyInputPage, BusinessTypeInputPage: BusinessTypeInputPage, PasswordInputPage: PasswordInputPage, ResultPage:ResultPage,RegistrationConnector: RegistrationConnector, CRNPage:CRNPage) extends FrontendController(mcc) with I18nSupport {
+class RegistrationController @Inject()(mcc: MessagesControllerComponents, NameInputPage: NameInputPage, BusinessNameInputPage: BusinessNameInputPage, ContactNumberInputPage: ContactNumberInputPage, PropertyInputPage: PropertyInputPage, BusinessTypeInputPage: BusinessTypeInputPage, PasswordInputPage: PasswordInputPage, ResultPage: ResultPage, RegistrationConnector: RegistrationConnector, CRNPage: CRNPage) extends FrontendController(mcc) with I18nSupport {
 
   def InputName: Action[AnyContent] = Action { implicit request =>
     val form: Form[UserName] = request.session.get("name").fold(UserNameForm.submitForm.fill(UserName(""))) { name =>
@@ -68,6 +68,7 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, NameIn
   }
 
   def SubmitInputContactNumber: Action[AnyContent] = Action { implicit request =>
+
     UserContactNumberForm.submitForm.bindFromRequest().fold({ formWithErrors =>
       BadRequest(ContactNumberInputPage(formWithErrors))
     }, { formData =>
@@ -82,7 +83,7 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, NameIn
     Ok(PropertyInputPage(form))
   }
 
-  def SubmitInputProperty = Action { implicit request =>
+  def SubmitInputProperty: Action[AnyContent] = Action { implicit request =>
     UserPropertyForm.submitForm.bindFromRequest().fold({ formWithErrors =>
       BadRequest(PropertyInputPage(formWithErrors))
     }, { formData =>
@@ -106,7 +107,7 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, NameIn
   }
 
   def InputPassword: Action[AnyContent] = Action { implicit request =>
-    val form: Form[UserPassword] = request.session.get("password").fold(UserPasswordForm.submitForm.fill((UserPassword("")))) { password =>
+    val form: Form[UserPassword] = request.session.get("password").fold(UserPasswordForm.submitForm.fill(UserPassword(""))) { password =>
       UserPasswordForm.submitForm.fill(UserPassword(password))
     }
     Ok(PasswordInputPage(form))
@@ -120,40 +121,40 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, NameIn
     })
   }
 
-    def Summary: Action[AnyContent] = Action { implicit request =>
-      request.session
-      val name:String = request.session.get("name").getOrElse("")
-      val business:String  = request.session.get("businessName").getOrElse("")
-      val contact:String = request.session.get("contactNumber").getOrElse("")
-      val property: UserProperty = UserProperty.decode(request.session.get("property").getOrElse(""))
-      val businessType:String = request.session.get("businessType").getOrElse("")
-      val password:String = request.session.get("password").getOrElse("")
-      val result = User(name,business,contact,property.propertyNumber,property.postcode,businessType,password)
+  def Summary: Action[AnyContent] = Action { implicit request =>
+    request.session
+    val name: String = request.session.get("name").getOrElse("")
+    val business: String = request.session.get("businessName").getOrElse("")
+    val contact: String = request.session.get("contactNumber").getOrElse("")
+    val property: UserProperty = UserProperty.decode(request.session.get("property").getOrElse(""))
+    val businessType: String = request.session.get("businessType").getOrElse("")
+    val password: String = request.session.get("password").getOrElse("")
+    val result = User(name, business, contact, property.propertyNumber, property.postcode, businessType, password)
 
-      Ok(ResultPage(result))
-    }
+    Ok(ResultPage(result))
+  }
 
-    def SummarySubmit: Action[AnyContent] = Action async { implicit request =>
-      val name:String = request.session.get("name").get
-      val businessName:String = request.session.get("businessName").get
-      val contactNumber:String = request.session.get("contactNumber").get
-      val property:UserProperty = UserProperty.decode(request.session.get("property").getOrElse(""))
-      val businessType:String = request.session.get("businessType").get
-      val password:String = request.session.get("password").get
-        val user = User(name,businessName,contactNumber,property.propertyNumber,property.postcode,businessType,password)
+  def SummarySubmit: Action[AnyContent] = Action async { implicit request =>
+    val name: String = request.session.get("name").getOrElse("")
+    val businessName: String = request.session.get("businessName").getOrElse("")
+    val contactNumber: String = request.session.get("contactNumber").getOrElse("")
+    val property: UserProperty = UserProperty.decode(request.session.get("property").getOrElse(""))
+    val businessType: String = request.session.get("businessType").getOrElse("")
+    val password: String = request.session.get("password").getOrElse("")
+    val user = User(name, businessName, contactNumber, property.propertyNumber, property.postcode, businessType, password)
 
-      RegistrationConnector.create(user).map {
-        case Some(client) => Ok(CRNPage(client)).withSession("crn"->client.crn ,"name"->client.name)
-        case _ => BadRequest
+    RegistrationConnector.create(user).map {
+      case Some(client) => Ok(CRNPage(client)).withSession("crn" -> client.crn, "name" -> client.name)
+      case _ => BadRequest
 
-      }
-    }
-
-     def home: Action[AnyContent] = Action  {implicit request =>
-       Redirect("http://localhost:9008/example-frontend/")
-     }
-
-    def dashboard: Action[AnyContent] = Action {implicit request =>
-      Redirect("http://localhost:9008/example-frontend/dashboard")
     }
   }
+
+  def home: Action[AnyContent] = Action { implicit request =>
+    Redirect("http://localhost:9008/example-frontend/")
+  }
+
+  def dashboard: Action[AnyContent] = Action { implicit request =>
+    Redirect("http://localhost:9008/example-frontend/dashboard")
+  }
+}

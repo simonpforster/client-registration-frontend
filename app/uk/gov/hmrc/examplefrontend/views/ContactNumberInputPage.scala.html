@@ -9,16 +9,16 @@
 @if(form.errors.nonEmpty){
 
 <span id="passport-issued-error" class="govuk-error-message">
-          <span class="govuk-visually-hidden">Error:</span> Please enter full Contact Number
-        </span>
+    <span class="govuk-visually-hidden">Error:</span> Please enter full Contact Number
+</span>
 }
 
 <a href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.InputBusinessName" class="govuk-back-link">Back</a>
 @helper.form(action = uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.SubmitInputContactNumber,'class -> "govuk-body"){
 @if(form.errors("contactNumber").nonEmpty){
-@govukInput(Input(id = "contact-number", name = "contactNumber", value = Some(form.data("contactNumber")), label = Label(content = Text("Contact Number:")), hint = Some(Hint(content = Text("example: 01895454545"))), errorMessage = Some(ErrorMessage(content = Text("Please provide a valid number")))))
+    @govukInput(Input(id = "contact-number",inputType = "number", name = "contactNumber", value = Some(form.data("contactNumber")), label = Label(content = Text("Contact Number:")), hint = Some(Hint(content = Text("example: 01895454545"))), errorMessage = Some(ErrorMessage(content = Text("Please provide a valid number")))))
 }else{
-@govukInput(Input(id = "contact-number", name = "contactNumber", value = Some(form.data("contactNumber")), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("Contact Number:"))))
+    @govukInput(Input(id = "contact-number" ,inputType = "number", name = "contactNumber", value = Some(form.data("contactNumber")), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("Contact Number:"))))
 }
 <button class="govuk-button" id="submit" data-module="govuk-button" type="submit">Next</button>
 }

@@ -17,24 +17,13 @@
 package uk.gov.hmrc.examplefrontend.controllers.unitTesting
 
 
-import org.scalatest.{BeforeAndAfter, stats}
+import org.scalatest.BeforeAndAfter
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 
-
-import scala.concurrent.{ExecutionContext, Future}
-import scala.xml.Document
-
 trait AbstractTest extends AnyWordSpec with BeforeAndAfter with Matchers with GuiceOneAppPerSuite {
 
-  override def fakeApplication(): Application =
-    new GuiceApplicationBuilder()
-      .configure(
-        "metrics.jvm" -> false,
-        "metrics.enabled" -> false
-      )
-      .build()
 }
