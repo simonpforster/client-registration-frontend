@@ -331,17 +331,21 @@ class RegistrationControllerSpec extends AbstractTest {
 
   "POST/SubmitPasswordInput" should {
     "return 303" in {
-      val result = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password" -> "pass"))
+      val result = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password" -> "pass", "passwordCheck" -> "pass"))
       status(result) shouldBe 303
     }
     "return html" in {
-      val result = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password" -> "pass"))
+      val result = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password" -> "pass", "passwordCheck" -> "pass"))
       val doc = Jsoup.parse(contentAsString(result))
       doc.getElementById("NameValue")
       session(result).get("password").getOrElse("") shouldBe "pass"
     }
     "return Bad Request" in {
-      val result: Future[Result] = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password" -> ""))
+      val result: Future[Result] = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password" -> "", "passwordCheck" -> "pass"))
+      status(result) shouldBe 400
+    }
+    "return Bad Request with missmatch password" in {
+      val result: Future[Result] = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password" -> "badpass", "passwordCheck" -> "pass"))
       status(result) shouldBe 400
     }
   }
