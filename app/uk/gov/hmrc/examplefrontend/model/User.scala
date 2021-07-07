@@ -90,13 +90,16 @@ object UserBusinessTypeForm {
     )
 }
 
-case class UserPassword(password: String)
+
+case class UserPassword(password: String, passwordCheck: String)
+
 
 object UserPasswordForm {
   val submitForm: Form[UserPassword] =
     Form(
       mapping(
-        "password" -> nonEmptyText
+        "password" -> nonEmptyText,
+        "passwordCheck" -> nonEmptyText
       )(UserPassword.apply)(UserPassword.unapply)
     )
 

@@ -77,15 +77,16 @@ class RegistrationControllerSpec extends AbstractTest {
 
   private val controller = new RegistrationController(
     mcc = Helpers.stubMessagesControllerComponents(),
-    NameInputPage = name,
-    BusinessNameInputPage = businessName,
-    ContactNumberInputPage = contactNumber,
-    PropertyInputPage = property,
-    BusinessTypeInputPage = businessType,
-    PasswordInputPage = password,
-    ResultPage = result,
-    RegistrationConnector = connector,
-    CRNPage = crn)
+
+    nameInputPage = name,
+    businessNameInputPage = businessName,
+    contactNumberInputPage = contactNumber,
+    propertyInputPage = property,
+    businessTypeInputPage = businessType,
+    passwordInputPage = password,
+    resultPage = result,
+    registrationConnector = connector,
+    crnPage = crn)
 
   private val user: User = User(
     name = "TestFullName",
@@ -256,6 +257,7 @@ class RegistrationControllerSpec extends AbstractTest {
       val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("PropertyNumberValue")
       session(result).get("contactNumber").getOrElse("") shouldBe "01895635898"
+
     }
     "return Bad Request" in {
       val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("contactNumber" -> ""))
