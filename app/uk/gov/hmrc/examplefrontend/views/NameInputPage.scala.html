@@ -5,7 +5,7 @@
 @(form: Form[UserName])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Enter Name")) {
-<h1 class="govuk-heading-xl", id="Name Value">Enter Name</h1>
+<h1 class="govuk-heading-xl" id="Name Value">Enter Name</h1>
 @if(form.errors.nonEmpty){
 
 <span id="passport-issued-error" class="govuk-error-message">
