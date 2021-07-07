@@ -25,7 +25,7 @@ import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, session, status}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.examplefrontend.Connector.RegistrationConnector
-import uk.gov.hmrc.examplefrontend.controllers.RegistrationController
+import uk.gov.hmrc.examplefrontend.controllers.{RegistrationController, routes}
 import uk.gov.hmrc.examplefrontend.model.{Client, User}
 import uk.gov.hmrc.examplefrontend.views.html._
 
@@ -37,7 +37,7 @@ class RegistrationControllerSpec extends AbstractTest {
 
   private val fakeRequestSummary: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
     method = "GET",
-    path = "/Summary")
+    path = "/summary")
     .withSession(
       "name" -> "jake",
       "businessName" -> "jakeBusiness",
@@ -47,11 +47,15 @@ class RegistrationControllerSpec extends AbstractTest {
       "password" -> "testpassword")
   private val fakeRequestSubmitSummary: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
     method = "GET",
-    path = "/SubmitSummary")
+    path = "/summary-submit")
   private val fakeRequestName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
     method = "GET",
-    path = "/NameInput")
-
+    path = "/name-input")
+  private val fakeRequestBusinessName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
+    method = "GET",
+    path = "/business-input"
+  )
+  private val fakeRequest = FakeRequest()
   private val fakeRequestSubmitProperty: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
     method = "GET",
     path = "/property-input")
@@ -59,10 +63,10 @@ class RegistrationControllerSpec extends AbstractTest {
       "property" -> "postcode/propertyNumber")
   private val fakeRequestSubmitName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
     method = "GET",
-    path = "/NameInput").withSession("name" -> "jake")
+    path = "/name-input").withSession("name" -> "jake")
   private val fakeRequestSubmitBusinessName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
     method = "POST",
-    path = "/BusinessNameInput")
+    path = "/business-input")
 
 
   val name: NameInputPage = app.injector.instanceOf(classOf[NameInputPage])
@@ -117,6 +121,10 @@ class RegistrationControllerSpec extends AbstractTest {
       val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("Name Value")
     }
+    "return redirect home" in {
+      val result: Future[Result] = controller.InputName(fakeRequestName.withSession("crn" -> "CRNTEST"))
+      status(result) shouldBe Status.SEE_OTHER
+    }
   }
 
   "GET/BusinessNameInput" should {
@@ -130,6 +138,10 @@ class RegistrationControllerSpec extends AbstractTest {
       val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("BusinessNameValue")
     }
+    "return redirect home" in {
+      val result: Future[Result] = controller.InputBusinessName(fakeRequest.withSession("crn" -> "CRNTEST"))
+      status(result) shouldBe Status.SEE_OTHER
+    }
   }
 
   "GET/ContactInput" should {
@@ -142,6 +154,10 @@ class RegistrationControllerSpec extends AbstractTest {
       contentType(result) shouldBe Some("text/html")
       val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("ContactNumberValue")
+    }
+    "return redirect home" in {
+      val result: Future[Result] = controller.InputBusinessName(fakeRequest.withSession("crn" -> "CRNTEST"))
+      status(result) shouldBe Status.SEE_OTHER
     }
   }
 
@@ -157,6 +173,10 @@ class RegistrationControllerSpec extends AbstractTest {
       val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("businessType1")
     }
+    "return redirect home" in {
+      val result: Future[Result] = controller.InputBusinessName(fakeRequest.withSession("crn" -> "CRNTEST"))
+      status(result) shouldBe Status.SEE_OTHER
+    }
   }
 
   "GET/PropertyNumberInput" should {
@@ -169,6 +189,10 @@ class RegistrationControllerSpec extends AbstractTest {
       contentType(result) shouldBe Some("text/html")
       val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("PropertyNumberValue")
+    }
+    "return redirect home" in {
+      val result: Future[Result] = controller.InputBusinessName(fakeRequest.withSession("crn" -> "CRNTEST"))
+      status(result) shouldBe Status.SEE_OTHER
     }
   }
 
@@ -183,6 +207,10 @@ class RegistrationControllerSpec extends AbstractTest {
       val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("PasswordValue")
     }
+    "return redirect home" in {
+      val result: Future[Result] = controller.InputBusinessName(fakeRequest.withSession("crn" -> "CRNTEST"))
+      status(result) shouldBe Status.SEE_OTHER
+    }
   }
 
   "GET/Summary" should {
@@ -196,6 +224,10 @@ class RegistrationControllerSpec extends AbstractTest {
       val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("NameValue")
       doc.getElementById("BusinessNameValue")
+    }
+    "return redirect home" in {
+      val result: Future[Result] = controller.InputBusinessName(fakeRequest.withSession("crn" -> "CRNTEST"))
+      status(result) shouldBe Status.SEE_OTHER
     }
   }
 
