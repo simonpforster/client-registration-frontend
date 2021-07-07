@@ -5,20 +5,20 @@
 @(form: Form[UserName])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Enter Name")) {
-<h1 class="govuk-heading-xl", id="Name Value">Enter Name</h1>
+<h1 class="govuk-heading-xl" id="Name Value">Enter Name</h1>
 @if(form.errors.nonEmpty){
 
 <span id="passport-issued-error" class="govuk-error-message">
-          <span class="govuk-visually-hidden">Error:</span> Please enter full name
-        </span>
+    <span class="govuk-visually-hidden">Error:</span> Please enter full name
+</span>
 }
 
-<a href="/example-frontend" class="govuk-back-link">Back</a>
+<a href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.home" class="govuk-back-link">Back</a>
 @helper.form(action = uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.SubmitInputName,'class -> "govuk-body"){
 @if(form.errors("name").nonEmpty){
-@govukInput(Input(id = "name", name = "name", value = Some(form.data("name")), label = Label(content = Text("Name:")), hint = Some(Hint(content = Text("example: jake"))), errorMessage = Some(ErrorMessage(content = Text("Please provide your First Name and Last Name")))))
+    @govukInput(Input(id = "name", name = "name", value = Some(form.data("name")), label = Label(content = Text("Name:")), hint = Some(Hint(content = Text("example: jake"))), errorMessage = Some(ErrorMessage(content = Text("Please provide your First Name and Last Name")))))
 }else{
-@govukInput(Input(id = "name", name = "name", value = Some(form.data("name")), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("Name"))))
+    @govukInput(Input(id = "name", name = "name", value = Some(form.data("name")), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("Name"))))
 }
 <button class="govuk-button" id="submit" data-module="govuk-button" type="submit">Next</button>
 }

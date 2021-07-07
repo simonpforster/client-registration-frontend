@@ -1,3 +1,4 @@
+import scoverage.ScoverageKeys
 import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
@@ -31,6 +32,8 @@ lazy val microservice = Project(appName, file("."))
   .configs(IntegrationTest)
   .settings(integrationTestSettings(): _*)
   .settings(resolvers += Resolver.jcenterRepo)
+  .settings(scoverageSettings)
+
 
 libraryDependencies += "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.12.3"
 
@@ -38,3 +41,14 @@ libraryDependencies += "com.github.tomakehurst" % "wiremock-jre8" % "2.27.1"
 
 libraryDependencies += "org.scalatestplus" %% "mockito-3-4" % "3.2.5.0" % "test"
 PlayKeys .devSettings := Seq ("play.server.http.port" -> "9007")
+
+
+
+lazy val scoverageSettings = Seq(
+  ScoverageKeys.coverageExcludedPackages := "<empty>;Reverse.*;config.*;.*(AuthService|BuildInfo|Routes).*;.*views.html.*",
+  ScoverageKeys.coverageMinimumStmtTotal := 95,
+  ScoverageKeys.coverageFailOnMinimum := true,
+  ScoverageKeys.coverageHighlighting := true
+)
+
+

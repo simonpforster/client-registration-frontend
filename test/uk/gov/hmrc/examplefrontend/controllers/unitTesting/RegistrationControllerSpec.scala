@@ -17,179 +17,313 @@
 package uk.gov.hmrc.examplefrontend.controllers.unitTesting
 
 import org.jsoup.Jsoup
-import org.mockito.Mockito.mock
+import org.jsoup.nodes.Document
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{mock, when}
 import play.api.http.Status
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.{FakeRequest, Helpers}
+import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, session, status}
+import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.examplefrontend.Connector.RegistrationConnector
 import uk.gov.hmrc.examplefrontend.controllers.RegistrationController
-import uk.gov.hmrc.examplefrontend.model.User
-import uk.gov.hmrc.examplefrontend.views.html.{BusinessNameInputPage, BusinessTypeInputPage, CRNPage, ContactNumberInputPage, NameInputPage, PasswordInputPage, PropertyInputPage, ResultPage}
+import uk.gov.hmrc.examplefrontend.model.{Client, User}
+import uk.gov.hmrc.examplefrontend.views.html._
+
+import scala.concurrent.Future
 
 
 class RegistrationControllerSpec extends AbstractTest {
 
 
-  private val fakeRequestSummary: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET","/Summary").withSession("name"->"jake","businessName"->"jakeBusiness","contactNumber"->"000","property"->"postcode/propertyNumber","businessType"->"testbusinessType","password"->"testpassword")
-  private val fakeRequestName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET","/NameInput").withSession()
-  private val fakeRequestSubmitProperty:FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET","/property-input").withSession("property"->"postcode/propertyNumber")
-  private val fakeRequestSubmitName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET","/NameInput").withSession("name"-> "jake")
-  private val fakeRequestSubmitBusinessName:FakeRequest[AnyContentAsEmpty.type] = FakeRequest("POST","/BusinessNameInput")
-  private val user:User = User("TestFullName","TestNameOfBusiness","TestContactNumber","TestPropertyNumber","TestAddress","TestPostCode","TestPassword")
+  private val fakeRequestSummary: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
+    method = "GET",
+    path = "/Summary")
+    .withSession(
+      "name" -> "jake",
+      "businessName" -> "jakeBusiness",
+      "contactNumber" -> "000",
+      "property" -> "postcode/propertyNumber",
+      "businessType" -> "testbusinessType",
+      "password" -> "testpassword")
+  private val fakeRequestSubmitSummary: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
+    method = "GET",
+    path = "/SubmitSummary")
+  private val fakeRequestName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
+    method = "GET",
+    path = "/NameInput")
 
-  val name:NameInputPage = app.injector.instanceOf(classOf[NameInputPage])
-  val businessName:BusinessNameInputPage = app.injector.instanceOf(classOf[BusinessNameInputPage])
-  val contactNumber:ContactNumberInputPage = app.injector.instanceOf(classOf[ContactNumberInputPage])
-  val property:PropertyInputPage = app.injector.instanceOf(classOf[PropertyInputPage])
+  private val fakeRequestSubmitProperty: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
+    method = "GET",
+    path = "/property-input")
+    .withSession(
+      "property" -> "postcode/propertyNumber")
+  private val fakeRequestSubmitName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
+    method = "GET",
+    path = "/NameInput").withSession("name" -> "jake")
+  private val fakeRequestSubmitBusinessName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
+    method = "POST",
+    path = "/BusinessNameInput")
+
+
+  val name: NameInputPage = app.injector.instanceOf(classOf[NameInputPage])
+  val businessName: BusinessNameInputPage = app.injector.instanceOf(classOf[BusinessNameInputPage])
+  val contactNumber: ContactNumberInputPage = app.injector.instanceOf(classOf[ContactNumberInputPage])
+  val property: PropertyInputPage = app.injector.instanceOf(classOf[PropertyInputPage])
   val businessType: BusinessTypeInputPage = app.injector.instanceOf(classOf[BusinessTypeInputPage])
   val password: PasswordInputPage = app.injector.instanceOf(classOf[PasswordInputPage])
   val result: ResultPage = app.injector.instanceOf(classOf[ResultPage])
   val crn: CRNPage = app.injector.instanceOf(classOf[CRNPage])
   val connector: RegistrationConnector = mock(classOf[RegistrationConnector])
 
-  private val controller = new RegistrationController(Helpers.stubMessagesControllerComponents(),name,businessName,contactNumber,property,businessType,password,result,connector,crn)
+  private val controller = new RegistrationController(
+    mcc = Helpers.stubMessagesControllerComponents(),
+
+    nameInputPage = name,
+    businessNameInputPage = businessName,
+    contactNumberInputPage = contactNumber,
+    propertyInputPage = property,
+    businessTypeInputPage = businessType,
+    passwordInputPage = password,
+    resultPage = result,
+    registrationConnector = connector,
+    crnPage = crn)
+
+  private val user: User = User(
+    name = "TestFullName",
+    businessName = "TestNameOfBusiness",
+    contactNumber = "TestContactNumber",
+    propertyNumber = "TestPropertyNumber",
+    postcode = "TestAddress",
+    businessType = "TestPostCode",
+    password = "TestPassword")
+  private val client: Client = Client(
+    crn = "CRN",
+    name = "TestFullName",
+    businessName = "TestNameOfBusiness",
+    contactNumber = "TestContactNumber",
+    propertyNumber = 10,
+    postcode = "TestAddress",
+    businessType = "TestPostCode",
+    arn = Option("Arn"))
 
   "GET /NameInput" should {
     "return 200" in {
-      val result = controller.InputName(fakeRequestName)
+      val result: Future[Result] = controller.InputName(fakeRequestName)
       status(result) shouldBe Status.OK
     }
-    "return html" in{
-      val result = controller.InputName(fakeRequestName)
+    "return html" in {
+      val result: Future[Result] = controller.InputName(fakeRequestName)
       contentType(result) shouldBe Some("text/html")
-      val doc=Jsoup.parse(contentAsString(result))
+      val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("Name Value")
     }
   }
 
-  "GET/BusinessNameInput" should{
+  "GET/BusinessNameInput" should {
     "return 200" in {
-      val result = controller.InputBusinessName(fakeRequestName)
+      val result: Future[Result] = controller.InputBusinessName(fakeRequestName)
       status(result) shouldBe Status.OK
     }
-    "return html" in{
-      val result = controller.InputBusinessName(fakeRequestName)
+    "return html" in {
+      val result: Future[Result] = controller.InputBusinessName(fakeRequestName)
       contentType(result) shouldBe Some("text/html")
-      val doc=Jsoup.parse(contentAsString(result))
+      val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("BusinessNameValue")
     }
   }
 
-  "GET/ContactInput" should{
+  "GET/ContactInput" should {
     "return 200" in {
-      val result = controller.InputContactNumber(fakeRequestName)
+      val result: Future[Result] = controller.InputContactNumber(fakeRequestName)
       status(result) shouldBe Status.OK
     }
-    "return html" in{
-      val result = controller.InputContactNumber(fakeRequestName)
+    "return html" in {
+      val result: Future[Result] = controller.InputContactNumber(fakeRequestName)
       contentType(result) shouldBe Some("text/html")
-      val doc=Jsoup.parse(contentAsString(result))
+      val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("ContactNumberValue")
     }
   }
 
-  "GET/PropertyNumberInput" should{
+  "GET/BusinessType" should {
     "return 200" in {
-      val result = controller.InputProperty(fakeRequestName)
-      status(result) shouldBe Status.OK
+      val result: Future[Result] = controller.InputBusinessType(fakeRequestName)
+      status(result) shouldBe 200
     }
-    "return html" in{
-      val result = controller.InputProperty(fakeRequestName)
+
+    "return html" in {
+      val result: Future[Result] = controller.InputBusinessType(fakeRequestName)
       contentType(result) shouldBe Some("text/html")
-      val doc=Jsoup.parse(contentAsString(result))
-      doc.getElementById("PropertyNumberValue")
-    }
-  }
-
-  "GET/PasswordInput" should{
-    "return 200" in {
-      val result = controller.InputPassword(fakeRequestName)
-      status(result) shouldBe Status.OK
-    }
-    "return html" in{
-      val result = controller.InputPassword(fakeRequestName)
-      contentType(result) shouldBe Some("text/html")
-      val doc=Jsoup.parse(contentAsString(result))
-      doc.getElementById("PasswordValue")
-    }
-  }
-
-  "GET/Summary" should{
-    "return 200" in {
-      val result = controller.Summary(fakeRequestSummary)
-      status(result) shouldBe Status.OK
-    }
-    "return html" in{
-      val result = controller.Summary(fakeRequestSummary)
-      contentType(result) shouldBe Some("text/html")
-      val doc=Jsoup.parse(contentAsString(result))
-      doc.getElementById("NameValue")
-      doc.getElementById("BusinessNameValue")
-    }
-  }
-
-  "POST/SubmitNameInput" should{
-    "retutn 303" in {
-      val result = controller.SubmitInputName(fakeRequestSubmitName.withFormUrlEncodedBody("name" -> "Jake"))
-      status(result) shouldBe 303
-    }
-    "return html" in{
-      val result = controller.SubmitInputName(fakeRequestSubmitName.withFormUrlEncodedBody("name" -> "Jake"))
-      val doc=Jsoup.parse(contentAsString(result))
-      doc.getElementById("BusinessNameValue")
-    }
-  }
-
-  "POST/SubmitBusinessNameInput" should{
-    "retutn 303" in {
-      val result = controller.SubmitInputBusinessName(fakeRequestSubmitBusinessName.withFormUrlEncodedBody("businessName" -> "Jake"))
-      status(result) shouldBe 303
-    }
-    "return html" in{
-      val result = controller.SubmitInputBusinessName(fakeRequestSubmitBusinessName.withFormUrlEncodedBody("businessName" -> "Jake"))
-      val doc=Jsoup.parse(contentAsString(result))
-      doc.getElementById("BusinessNameValue")
-      session(result).get("businessName").getOrElse("") shouldBe ("Jake")
-    }
-  }
-
-  "POST/SubmitContactInput" should{
-    "retutn 303" in {
-      val result = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("contactNumber" -> "000"))
-      status(result) shouldBe 303
-    }
-    "return html" in{
-      val result = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("contactNumber" -> "000"))
-      val doc=Jsoup.parse(contentAsString(result))
-      doc.getElementById("PropertyNumberValue")
-      session(result).get("contactNumber").getOrElse("") shouldBe ("000")
-    }
-  }
-
-  "POST/SubmitPropertyInput" should{
-    "retutn 303" in {
-      val result = controller.SubmitInputProperty(fakeRequestSubmitProperty.withFormUrlEncodedBody("propertyNumber" -> "10", "postcode" -> "London"))
-      status(result) shouldBe 303
-    }
-    "return html" in{
-      val result = controller.SubmitInputProperty(fakeRequestSubmitProperty.withFormUrlEncodedBody("propertyNumber" -> "10", "postcode" -> "London"))
-      val doc=Jsoup.parse(contentAsString(result))
+      val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("businessType1")
     }
   }
 
-  "POST/SubmitPasswordInput" should{
-    "retutn 303" in {
-      val result = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password" -> "pass"))
-      status(result) shouldBe 303
+  "GET/PropertyNumberInput" should {
+    "return 200" in {
+      val result: Future[Result] = controller.InputProperty(fakeRequestName)
+      status(result) shouldBe Status.OK
     }
-    "return html" in{
-      val result = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password" -> "pass"))
-      val doc=Jsoup.parse(contentAsString(result))
-      doc.getElementById("NameValue")
-      session(result).get("password").getOrElse("") shouldBe ("pass")
+    "return html" in {
+      val result: Future[Result] = controller.InputProperty(fakeRequestName)
+      contentType(result) shouldBe Some("text/html")
+      val doc: Document = Jsoup.parse(contentAsString(result))
+      doc.getElementById("PropertyNumberValue")
     }
   }
 
+  "GET/PasswordInput" should {
+    "return 200" in {
+      val result = controller.InputPassword(fakeRequestName)
+      status(result) shouldBe Status.OK
+    }
+    "return html" in {
+      val result: Future[Result] = controller.InputPassword(fakeRequestName)
+      contentType(result) shouldBe Some("text/html")
+      val doc: Document = Jsoup.parse(contentAsString(result))
+      doc.getElementById("PasswordValue")
+    }
+  }
+
+  "GET/Summary" should {
+    "return 200" in {
+      val result: Future[Result] = controller.Summary(fakeRequestSummary)
+      status(result) shouldBe Status.OK
+    }
+    "return html" in {
+      val result: Future[Result] = controller.Summary(fakeRequestSummary)
+      contentType(result) shouldBe Some("text/html")
+      val doc: Document = Jsoup.parse(contentAsString(result))
+      doc.getElementById("NameValue")
+      doc.getElementById("BusinessNameValue")
+    }
+  }
+
+  "Redirect home page" should {
+    "return 303" in {
+      val result: Future[Result] = controller.home(fakeRequestSummary)
+      status(result) shouldBe 303
+    }
+  }
+
+  "Redirect Dashboard" should {
+    "return 303" in {
+      val result: Future[Result] = controller.dashboard(fakeRequestName)
+      status(result) shouldBe 303
+    }
+  }
+
+
+  "POST/SubmitNameInput" should {
+    "return 303" in {
+      val result: Future[Result] = controller.SubmitInputName(fakeRequestSubmitName.withFormUrlEncodedBody("name" -> "Jake"))
+      status(result) shouldBe 303
+    }
+    "return html" in {
+      val result: Future[Result] = controller.SubmitInputName(fakeRequestSubmitName.withFormUrlEncodedBody("name" -> "Jake"))
+      val doc: Document = Jsoup.parse(contentAsString(result))
+      doc.getElementById("BusinessNameValue")
+    }
+    "return Bad Request" in {
+      val result: Future[Result] = controller.SubmitInputName(fakeRequestSubmitName.withFormUrlEncodedBody("name" -> ""))
+      status(result) shouldBe 400
+    }
+  }
+
+  "POST/SubmitBusinessNameInput" should {
+    "return 303" in {
+      val result: Future[Result] = controller.SubmitInputBusinessName(fakeRequestSubmitBusinessName.withFormUrlEncodedBody("businessName" -> "Jake"))
+      status(result) shouldBe 303
+    }
+    "return html" in {
+      val result: Future[Result] = controller.SubmitInputBusinessName(fakeRequestSubmitBusinessName.withFormUrlEncodedBody("businessName" -> "Jake"))
+      val doc: Document = Jsoup.parse(contentAsString(result))
+      doc.getElementById("BusinessNameValue")
+      session(result).get("businessName").getOrElse("") shouldBe "Jake"
+    }
+    "return Bad Request" in {
+      val result: Future[Result] = controller.SubmitInputBusinessName(fakeRequestSubmitName.withFormUrlEncodedBody("businessName" -> ""))
+      status(result) shouldBe 400
+    }
+  }
+
+  "POST/SubmitContactInput" should {
+    "return 303" in {
+      val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("contactNumber" -> "01895635898"))
+      status(result) shouldBe 303
+    }
+    "return html" in {
+      val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("contactNumber" -> "01895635898"))
+      val doc: Document = Jsoup.parse(contentAsString(result))
+      doc.getElementById("PropertyNumberValue")
+      session(result).get("contactNumber").getOrElse("") shouldBe "01895635898"
+
+    }
+    "return Bad Request" in {
+      val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("contactNumber" -> ""))
+      status(result) shouldBe 400
+    }
+  }
+
+  "POST/SubmitPropertyInput" should {
+    "return 303" in {
+      val result = controller.SubmitInputProperty(fakeRequestSubmitProperty.withFormUrlEncodedBody("propertyNumber" -> "10", "postcode" -> "London"))
+      status(result) shouldBe 303
+    }
+    "return html" in {
+      val result = controller.SubmitInputProperty(fakeRequestSubmitProperty.withFormUrlEncodedBody("propertyNumber" -> "10", "postcode" -> "London"))
+      val doc = Jsoup.parse(contentAsString(result))
+      doc.getElementById("businessType1")
+    }
+    "return Bad Request" in {
+      val result: Future[Result] = controller.SubmitInputProperty(fakeRequestSubmitName.withFormUrlEncodedBody("propertyNumber" -> "", "postcode" -> ""))
+      status(result) shouldBe 400
+    }
+  }
+
+  "POST/SubmitInputBusinessType" should {
+    "return 303" in {
+      val result = controller.SubmitInputBusinessType(fakeRequestSubmitProperty.withFormUrlEncodedBody("businessType" -> "other"))
+      status(result) shouldBe 303
+    }
+    "return html" in {
+      val result = controller.SubmitInputBusinessType(fakeRequestSubmitProperty.withFormUrlEncodedBody("businessType" -> "other"))
+      val doc = Jsoup.parse(contentAsString(result))
+      doc.getElementById("password")
+    }
+    "return Bad Request" in {
+      val result: Future[Result] = controller.SubmitInputBusinessType(fakeRequestSubmitName.withFormUrlEncodedBody())
+      status(result) shouldBe 400
+    }
+  }
+
+  "POST/SubmitPasswordInput" should {
+    "return 303" in {
+      val result = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password" -> "pass"))
+      status(result) shouldBe 303
+    }
+    "return html" in {
+      val result = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password" -> "pass"))
+      val doc = Jsoup.parse(contentAsString(result))
+      doc.getElementById("NameValue")
+      session(result).get("password").getOrElse("") shouldBe "pass"
+    }
+    "return Bad Request" in {
+      val result: Future[Result] = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password" -> ""))
+      status(result) shouldBe 400
+    }
+  }
+
+  "POST/SubmitSummary" should {
+    "return 303" in {
+      when(connector.create(any())) thenReturn Future.successful(Some(client))
+      val result: Future[Result] = controller.SummarySubmit(fakeRequestSubmitSummary.withSession("name" -> user.name, "businessName" -> user.businessName, "contactNumber" -> user.contactNumber, "businessType" -> user.businessType, "password" -> user.password, "property" -> (user.propertyNumber + "/" + user.postcode)))
+      status(result) shouldBe 200
+    }
+    "return Bad Request" in {
+      when(connector.create(any())) thenReturn Future.successful(None)
+      val result: Future[Result] = controller.SummarySubmit(fakeRequestSubmitSummary.withSession("name" -> user.name, "businessName" -> user.businessName, "contactNumber" -> user.contactNumber, "businessType" -> user.businessType, "password" -> user.password, "property" -> (user.propertyNumber + "/" + user.postcode)))
+      status(result) shouldBe 400
+    }
+  }
 }

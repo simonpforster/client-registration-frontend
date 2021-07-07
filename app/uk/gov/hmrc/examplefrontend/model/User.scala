@@ -18,13 +18,12 @@ package uk.gov.hmrc.examplefrontend.model
 
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}
-import play.api.libs.json.{Json, OFormat}
 
 
-case class UserName(name:String)
+case class UserName(name: String)
 
-object UserNameForm{
-  val submitForm:Form[UserName] =
+object UserNameForm {
+  val submitForm: Form[UserName] =
     Form(
       mapping(
         "name" -> nonEmptyText
@@ -32,10 +31,10 @@ object UserNameForm{
     )
 }
 
-case class UserBusinessName(business:String)
+case class UserBusinessName(business: String)
 
-object UserBusinessNameForm{
-  val submitForm:Form[UserBusinessName] =
+object UserBusinessNameForm {
+  val submitForm: Form[UserBusinessName] =
     Form(
       mapping(
         "businessName" -> nonEmptyText
@@ -43,34 +42,34 @@ object UserBusinessNameForm{
     )
 }
 
-case class UserContactNumber(contact:String)
+case class UserContactNumber(contact: String)
 
-object UserContactNumberForm{
-  val submitForm:Form[UserContactNumber] =
+object UserContactNumberForm {
+  val submitForm: Form[UserContactNumber] =
     Form(
       mapping(
-        "contactNumber" -> nonEmptyText
+        "contactNumber" -> nonEmptyText(minLength = 10)
       )(UserContactNumber.apply)(UserContactNumber.unapply)
     )
 }
 
-case class UserProperty(propertyNumber:String,postcode:String){
-  def encode():String ={
-    (propertyNumber + "/" + postcode)
+case class UserProperty(propertyNumber: String, postcode: String) {
+  def encode(): String = {
+    propertyNumber + "/" + postcode
   }
 }
 
-object UserProperty{
-  def decode(x : String): UserProperty = {
-    val (propertyNumber,postcode):(String,String) = x.split("/").toList match {
-      case  propertyNumber :: postcode:: _ => ((propertyNumber, postcode))
+object UserProperty {
+  def decode(x: String): UserProperty = {
+    val (propertyNumber, postcode): (String, String) = x.split("/").toList match {
+      case propertyNumber :: postcode :: _ => (propertyNumber, postcode)
     }
     UserProperty(propertyNumber = propertyNumber, postcode = postcode)
   }
 }
 
-object UserPropertyForm{
-  val submitForm:Form[UserProperty] =
+object UserPropertyForm {
+  val submitForm: Form[UserProperty] =
     Form(
       mapping(
         "propertyNumber" -> nonEmptyText,
@@ -78,11 +77,12 @@ object UserPropertyForm{
       )(UserProperty.apply)(UserProperty.unapply)
     )
 }
+
 //(soleTrader:String, partnership:String, limitedCompany:String,other:String)
 case class UserBusinessType(businessType: String)
 
-object UserBusinessTypeForm{
-  val submitForm:Form[UserBusinessType] =
+object UserBusinessTypeForm {
+  val submitForm: Form[UserBusinessType] =
     Form(
       mapping(
         "businessType" -> nonEmptyText,
@@ -90,38 +90,28 @@ object UserBusinessTypeForm{
     )
 }
 
-case class UserPassword(password:String)
 
-object UserPasswordForm{
-  val submitForm:Form[UserPassword] =
+case class UserPassword(password: String, passwordCheck: String)
+
+
+object UserPasswordForm {
+  val submitForm: Form[UserPassword] =
     Form(
       mapping(
-        "password" -> nonEmptyText
+        "password" -> nonEmptyText,
+        "passwordCheck" -> nonEmptyText
       )(UserPassword.apply)(UserPassword.unapply)
     )
 
 }
 
-case class User(name:String,
-                businessName:String,
-                contactNumber:String,
-                propertyNumber:String,
-                postcode:String,
-                businessType:String,
-                password:String)
+case class User(name: String,
+                businessName: String,
+                contactNumber: String,
+                propertyNumber: String,
+                postcode: String,
+                businessType: String,
+                password: String)
 
-object UserForm{
-  val submitForm:Form[User] =
-  Form(
-  mapping(
-    "name" -> nonEmptyText,
-    "businessName" -> nonEmptyText,
-    "contactNumber" -> nonEmptyText,
-    "propertyNumber" -> nonEmptyText,
-    "postcode" -> nonEmptyText,
-    "businessType" -> nonEmptyText,
-    "password" -> nonEmptyText
-  )(User.apply)(User.unapply)
-  )
-}
+
 
