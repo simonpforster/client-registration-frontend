@@ -18,6 +18,7 @@ package uk.gov.hmrc.examplefrontend.model
 
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}
+import uk.gov.hmrc.examplefrontend.common.UserClientProperties
 
 
 case class UserName(name: String)
@@ -26,7 +27,7 @@ object UserNameForm {
   val submitForm: Form[UserName] =
     Form(
       mapping(
-        "name" -> nonEmptyText
+        UserClientProperties.name -> nonEmptyText
       )(UserName.apply)(UserName.unapply)
     )
 }
@@ -37,7 +38,7 @@ object UserBusinessNameForm {
   val submitForm: Form[UserBusinessName] =
     Form(
       mapping(
-        "businessName" -> nonEmptyText
+        UserClientProperties.businessName -> nonEmptyText
       )(UserBusinessName.apply)(UserBusinessName.unapply)
     )
 }
@@ -48,7 +49,7 @@ object UserContactNumberForm {
   val submitForm: Form[UserContactNumber] =
     Form(
       mapping(
-        "contactNumber" -> nonEmptyText(minLength = 10)
+        UserClientProperties.contactNumber -> nonEmptyText(minLength = 10)
       )(UserContactNumber.apply)(UserContactNumber.unapply)
     )
 }
@@ -72,8 +73,8 @@ object UserPropertyForm {
   val submitForm: Form[UserProperty] =
     Form(
       mapping(
-        "propertyNumber" -> nonEmptyText,
-        "postcode" -> nonEmptyText
+        UserClientProperties.propertyNumber -> nonEmptyText,
+        UserClientProperties.postcode -> nonEmptyText
       )(UserProperty.apply)(UserProperty.unapply)
     )
 }
@@ -85,7 +86,7 @@ object UserBusinessTypeForm {
   val submitForm: Form[UserBusinessType] =
     Form(
       mapping(
-        "businessType" -> nonEmptyText,
+        UserClientProperties.businessType -> nonEmptyText,
       )(UserBusinessType.apply)(UserBusinessType.unapply)
     )
 }
@@ -98,8 +99,8 @@ object UserPasswordForm {
   val submitForm: Form[UserPassword] =
     Form(
       mapping(
-        "password" -> nonEmptyText,
-        "passwordCheck" -> nonEmptyText
+        UserClientProperties.password -> nonEmptyText,
+        UserClientProperties.passwordCheck -> nonEmptyText
       )(UserPassword.apply)(UserPassword.unapply)
     )
 

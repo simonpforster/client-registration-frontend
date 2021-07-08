@@ -3,6 +3,7 @@
 ->         /govuk-frontend          govuk.Routes
 ->         /hmrc-frontend           hmrcfrontend.Routes
 GET        /assets/*file            controllers.Assets.versioned(path = "/public", file: Asset)
+
 GET        /name-input               uk.gov.hmrc.examplefrontend.controllers.RegistrationController.InputName
 POST       /name-input               uk.gov.hmrc.examplefrontend.controllers.RegistrationController.SubmitInputName
 GET        /business-input           uk.gov.hmrc.examplefrontend.controllers.RegistrationController.InputBusinessName
@@ -17,6 +18,7 @@ GET        /password-input           uk.gov.hmrc.examplefrontend.controllers.Reg
 POST       /password-input           uk.gov.hmrc.examplefrontend.controllers.RegistrationController.SubmitInputPassword
 GET        /summary                  uk.gov.hmrc.examplefrontend.controllers.RegistrationController.Summary
 GET        /summary-submit           uk.gov.hmrc.examplefrontend.controllers.RegistrationController.SummarySubmit
+
 GET        /home                     uk.gov.hmrc.examplefrontend.controllers.RegistrationController.home
 GET        /dashboard                uk.gov.hmrc.examplefrontend.controllers.RegistrationController.dashboard
 
