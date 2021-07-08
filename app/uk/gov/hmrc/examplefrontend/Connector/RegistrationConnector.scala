@@ -19,6 +19,7 @@ package uk.gov.hmrc.examplefrontend.Connector
 import play.api.libs.json.{JsObject, Json}
 import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.mvc.ControllerComponents
+import uk.gov.hmrc.examplefrontend.common.UserClientProperties
 import uk.gov.hmrc.examplefrontend.model.{Client, User}
 
 import javax.inject.Inject
@@ -36,13 +37,13 @@ class RegistrationConnector @Inject()(ws: WSClient, val controllerComponents: Co
 
   def create(user: User): Future[Option[Client]] = {
     val newUser: JsObject = Json.obj(
-      "name" -> user.name,
-      "businessName" -> user.businessName,
-      "contactNumber" -> user.contactNumber,
-      "propertyNumber" -> user.propertyNumber.toInt,
-      "postcode" -> user.postcode,
-      "businessType" -> user.businessType,
-      "password" -> user.password
+      UserClientProperties.name -> user.name,
+      UserClientProperties.businessName -> user.businessName,
+      UserClientProperties.contactNumber -> user.contactNumber,
+      UserClientProperties.propertyNumber -> user.propertyNumber.toInt,
+      UserClientProperties.postcode -> user.postcode,
+      UserClientProperties.businessType -> user.businessType,
+      UserClientProperties.password -> user.password
     )
     wspost(url = "/register", jsObject = newUser).map { x => Json.fromJson[Client](x.json).asOpt }
   }

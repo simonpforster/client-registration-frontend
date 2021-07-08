@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.examplefrontend.controllers.unitTesting
+package uk.gov.hmrc.examplefrontend.common
 
-
-import org.scalatest.BeforeAndAfter
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-
-trait AbstractTest extends AnyWordSpec with BeforeAndAfter with Matchers with GuiceOneAppPerSuite {
-
+object UserClientProperties {
+  val crn: String = "crn"
+  val name: String = "name"
+  val businessName: String = "businessName"
+  val contactNumber: String = "contactNumber"
+  val propertyNumber: String = "propertyNumber"
+  val postcode: String = "postcode"
+  val businessType: String = "businessType"
+  val password: String = "password"
+  val passwordCheck: String = "passwordCheck"
 }
