@@ -40,6 +40,4 @@ class RegistrationConnectorSpec extends WireMockHelper with BeforeAndAfterEach w
       result.get.crn should include("CRN")
     }
   }
-
-
 }
