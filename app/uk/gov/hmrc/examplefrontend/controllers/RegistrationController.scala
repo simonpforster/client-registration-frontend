@@ -18,7 +18,6 @@ package uk.gov.hmrc.examplefrontend.controllers
 
 
 import play.api.data.Form
-import play.api.data.validation.{Constraint, Invalid, ValidationError}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.examplefrontend.Connector.RegistrationConnector
@@ -56,7 +55,7 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
 
   def InputBusinessName: Action[AnyContent] = Action { implicit request =>
     if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
-      val form: Form[UserBusinessName] = request.session.get("business").fold(UserBusinessNameForm.submitForm.fill(UserBusinessName(""))) { business => UserBusinessNameForm.submitForm.fill(UserBusinessName(business))
+      val form: Form[UserBusinessName] = request.session.get("businessName").fold(UserBusinessNameForm.submitForm.fill(UserBusinessName(""))) { business => UserBusinessNameForm.submitForm.fill(UserBusinessName(business))
       }
       Ok(businessNameInputPage(form))
     }
@@ -92,7 +91,7 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
 
   def InputProperty: Action[AnyContent] = Action { implicit request =>
     if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
-      val form: Form[UserProperty] = request.session.get("propertyNumber" + "postcode").fold(UserPropertyForm.submitForm.fill(UserProperty("", ""))) { property =>
+      val form: Form[UserProperty] = request.session.get("property").fold(UserPropertyForm.submitForm.fill(UserProperty("", ""))) { property =>
         UserPropertyForm.submitForm.fill(UserProperty.decode(property))
       }
       Ok(propertyInputPage(form))
@@ -111,7 +110,7 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
 
   def InputBusinessType: Action[AnyContent] = Action { implicit request =>
     if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
-      val form: Form[UserBusinessType] = request.session.get("propertyType").fold(UserBusinessTypeForm.submitForm.fill(UserBusinessType(""))) { business =>
+      val form: Form[UserBusinessType] = request.session.get("businessType").fold(UserBusinessTypeForm.submitForm.fill(UserBusinessType(""))) { business =>
         UserBusinessTypeForm.submitForm.fill(UserBusinessType(business))
       }
       Ok(businessTypeInputPage(form))
@@ -130,9 +129,6 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
 
   def InputPassword: Action[AnyContent] = Action { implicit request =>
     if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
-      val form: Form[UserPassword] = request.session.get("propertyType").fold(UserPasswordForm.submitForm.fill(UserPassword("", ""))) { password =>
-        UserPasswordForm.submitForm.fill(UserPassword(password, password))
-      }
       Ok(passwordInputPage(UserPasswordForm.submitForm.fill(UserPassword("", ""))))
     }
   }
