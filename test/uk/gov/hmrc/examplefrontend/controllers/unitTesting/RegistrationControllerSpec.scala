@@ -118,12 +118,16 @@ class RegistrationControllerSpec extends AbstractTest {
     "return html" in {
       val result: Future[Result] = controller.InputName(fakeRequestName)
       contentType(result) shouldBe Some("text/html")
-      val doc: Document = Jsoup.parse(contentAsString(result))
-      doc.getElementById("Name Value")
     }
     "return redirect home" in {
       val result: Future[Result] = controller.InputName(fakeRequestName.withSession("crn" -> "CRNTEST"))
       status(result) shouldBe Status.SEE_OTHER
+    }
+    "pre populate the form with session" in{
+      val result: Future[Result] = controller.InputName(fakeRequestName.withSession("name"->"testName"))
+      contentType(result) shouldBe Some("text/html")
+      val doc: Document = Jsoup.parse(contentAsString(result))
+      doc.getElementById("name").`val` shouldBe "testName"
     }
   }
 
@@ -139,8 +143,14 @@ class RegistrationControllerSpec extends AbstractTest {
       doc.getElementById("BusinessNameValue")
     }
     "return redirect home" in {
-      val result: Future[Result] = controller.InputBusinessName(fakeRequest.withSession("crn" -> "CRNTEST"))
+      val result: Future[Result] = controller.InputBusinessName(fakeRequestName.withSession("crn" -> "CRNTEST"))
       status(result) shouldBe Status.SEE_OTHER
+    }
+    "pre populate the form with session" in{
+      val result: Future[Result] = controller.InputBusinessName(fakeRequestName.withSession("businessName"->"testName"))
+      contentType(result) shouldBe Some("text/html")
+      val doc: Document = Jsoup.parse(contentAsString(result))
+      doc.getElementById("business-name").`val` shouldBe "testName"
     }
   }
 
@@ -156,8 +166,14 @@ class RegistrationControllerSpec extends AbstractTest {
       doc.getElementById("ContactNumberValue")
     }
     "return redirect home" in {
-      val result: Future[Result] = controller.InputBusinessName(fakeRequest.withSession("crn" -> "CRNTEST"))
+      val result: Future[Result] = controller.InputContactNumber(fakeRequestName.withSession("crn" -> "CRNTEST"))
       status(result) shouldBe Status.SEE_OTHER
+    }
+    "pre populate the form with session" in{
+      val result: Future[Result] = controller.InputContactNumber(fakeRequestName.withSession("contactNumber"->"01000000000"))
+      contentType(result) shouldBe Some("text/html")
+      val doc: Document = Jsoup.parse(contentAsString(result))
+      doc.getElementById("contact-number").`val` shouldBe "01000000000"
     }
   }
 
@@ -174,8 +190,14 @@ class RegistrationControllerSpec extends AbstractTest {
       doc.getElementById("businessType1")
     }
     "return redirect home" in {
-      val result: Future[Result] = controller.InputBusinessName(fakeRequest.withSession("crn" -> "CRNTEST"))
+      val result: Future[Result] = controller.InputBusinessType(fakeRequestName.withSession("crn" -> "CRNTEST"))
       status(result) shouldBe Status.SEE_OTHER
+    }
+    "pre populate the form with session" in{
+      val result: Future[Result] = controller.InputBusinessType(fakeRequestName.withSession("businessType"->"business-other"))
+      contentType(result) shouldBe Some("text/html")
+      val doc: Document = Jsoup.parse(contentAsString(result))
+      doc.getElementById("business-other").`val` shouldBe "Other"
     }
   }
 
@@ -191,8 +213,15 @@ class RegistrationControllerSpec extends AbstractTest {
       doc.getElementById("PropertyNumberValue")
     }
     "return redirect home" in {
-      val result: Future[Result] = controller.InputBusinessName(fakeRequest.withSession("crn" -> "CRNTEST"))
+      val result: Future[Result] = controller.InputProperty(fakeRequestName.withSession("crn" -> "CRNTEST"))
       status(result) shouldBe Status.SEE_OTHER
+    }
+    "pre populate the form with session" in{
+      val result: Future[Result] = controller.InputProperty(fakeRequestName.withSession("property"-> "404/test"))
+      contentType(result) shouldBe Some("text/html")
+      val doc: Document = Jsoup.parse(contentAsString(result))
+      doc.getElementById("property-number").`val` shouldBe "404"
+      doc.getElementById("postcode").`val` shouldBe "test"
     }
   }
 
@@ -208,7 +237,7 @@ class RegistrationControllerSpec extends AbstractTest {
       doc.getElementById("PasswordValue")
     }
     "return redirect home" in {
-      val result: Future[Result] = controller.InputBusinessName(fakeRequest.withSession("crn" -> "CRNTEST"))
+      val result: Future[Result] = controller.InputPassword(fakeRequestName.withSession("crn" -> "CRNTEST"))
       status(result) shouldBe Status.SEE_OTHER
     }
   }
@@ -226,7 +255,7 @@ class RegistrationControllerSpec extends AbstractTest {
       doc.getElementById("BusinessNameValue")
     }
     "return redirect home" in {
-      val result: Future[Result] = controller.InputBusinessName(fakeRequest.withSession("crn" -> "CRNTEST"))
+      val result: Future[Result] = controller.Summary(fakeRequestSummary.withSession("crn" -> "CRNTEST"))
       status(result) shouldBe Status.SEE_OTHER
     }
   }
@@ -247,6 +276,10 @@ class RegistrationControllerSpec extends AbstractTest {
 
 
   "POST/SubmitNameInput" should {
+    "return redirect home" in {
+      val result: Future[Result] = controller.SubmitInputName(fakeRequestSubmitName.withSession("crn" -> "CRNTEST","name" -> "Jake"))
+      status(result) shouldBe Status.SEE_OTHER
+    }
     "return 303" in {
       val result: Future[Result] = controller.SubmitInputName(fakeRequestSubmitName.withFormUrlEncodedBody("name" -> "Jake"))
       status(result) shouldBe 303
@@ -263,6 +296,10 @@ class RegistrationControllerSpec extends AbstractTest {
   }
 
   "POST/SubmitBusinessNameInput" should {
+    "return redirect home" in {
+      val result: Future[Result] = controller.SubmitInputBusinessName(fakeRequestSubmitBusinessName.withSession("crn" -> "CRNTEST","businessName" -> "Jake"))
+      status(result) shouldBe Status.SEE_OTHER
+    }
     "return 303" in {
       val result: Future[Result] = controller.SubmitInputBusinessName(fakeRequestSubmitBusinessName.withFormUrlEncodedBody("businessName" -> "Jake"))
       status(result) shouldBe 303
@@ -280,6 +317,10 @@ class RegistrationControllerSpec extends AbstractTest {
   }
 
   "POST/SubmitContactInput" should {
+    "return redirect home" in {
+      val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestSubmitName.withSession("crn" -> "CRNTEST","contactNumber" -> "01895635898"))
+      status(result) shouldBe Status.SEE_OTHER
+    }
     "return 303" in {
       val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestSubmitName.withFormUrlEncodedBody("contactNumber" -> "01895635898"))
       status(result) shouldBe 303
@@ -298,6 +339,10 @@ class RegistrationControllerSpec extends AbstractTest {
   }
 
   "POST/SubmitPropertyInput" should {
+    "return redirect home" in {
+      val result: Future[Result] = controller.SubmitInputProperty(fakeRequestSubmitProperty.withSession("crn" -> "CRNTEST","propertyNumber" -> "10", "postcode" -> "London"))
+      status(result) shouldBe Status.SEE_OTHER
+    }
     "return 303" in {
       val result = controller.SubmitInputProperty(fakeRequestSubmitProperty.withFormUrlEncodedBody("propertyNumber" -> "10", "postcode" -> "London"))
       status(result) shouldBe 303
@@ -314,6 +359,10 @@ class RegistrationControllerSpec extends AbstractTest {
   }
 
   "POST/SubmitInputBusinessType" should {
+    "return redirect home" in {
+      val result: Future[Result] = controller.SubmitInputBusinessType(fakeRequestSubmitProperty.withSession("crn" -> "CRNTEST","businessType" -> "other"))
+      status(result) shouldBe Status.SEE_OTHER
+    }
     "return 303" in {
       val result = controller.SubmitInputBusinessType(fakeRequestSubmitProperty.withFormUrlEncodedBody("businessType" -> "other"))
       status(result) shouldBe 303
@@ -330,6 +379,10 @@ class RegistrationControllerSpec extends AbstractTest {
   }
 
   "POST/SubmitPasswordInput" should {
+    "return redirect home" in {
+      val result: Future[Result] = controller.SubmitInputPassword(fakeRequestSubmitProperty.withSession("crn" -> "CRNTEST","password" -> "pass", "passwordCheck" -> "pass"))
+      status(result) shouldBe Status.SEE_OTHER
+    }
     "return 303" in {
       val result = controller.SubmitInputPassword(fakeRequestSubmitName.withFormUrlEncodedBody("password" -> "pass", "passwordCheck" -> "pass"))
       status(result) shouldBe 303
@@ -351,6 +404,10 @@ class RegistrationControllerSpec extends AbstractTest {
   }
 
   "POST/SubmitSummary" should {
+    "return redirect home" in {
+      val result: Future[Result] = controller.SummarySubmit(fakeRequestSubmitName.withSession("crn" -> "CRNTEST","name" -> user.name, "businessName" -> user.businessName, "contactNumber" -> user.contactNumber, "businessType" -> user.businessType, "password" -> user.password, "property" -> (user.propertyNumber + "/" + user.postcode)))
+      status(result) shouldBe Status.SEE_OTHER
+    }
     "return 303" in {
       when(connector.create(any())) thenReturn Future.successful(Some(client))
       val result: Future[Result] = controller.SummarySubmit(fakeRequestSubmitSummary.withSession("name" -> user.name, "businessName" -> user.businessName, "contactNumber" -> user.contactNumber, "businessType" -> user.businessType, "password" -> user.password, "property" -> (user.propertyNumber + "/" + user.postcode)))
