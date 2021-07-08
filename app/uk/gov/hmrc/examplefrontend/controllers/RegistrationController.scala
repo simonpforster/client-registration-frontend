@@ -21,6 +21,7 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.examplefrontend.Connector.RegistrationConnector
+import uk.gov.hmrc.examplefrontend.config.ErrorHandler
 import uk.gov.hmrc.examplefrontend.model._
 import uk.gov.hmrc.examplefrontend.views.html._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -30,11 +31,24 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameInputPage: NameInputPage, businessNameInputPage: BusinessNameInputPage, contactNumberInputPage: ContactNumberInputPage, propertyInputPage: PropertyInputPage, businessTypeInputPage: BusinessTypeInputPage, passwordInputPage: PasswordInputPage, resultPage: ResultPage, registrationConnector: RegistrationConnector, crnPage: CRNPage) extends FrontendController(mcc) with I18nSupport {
+class RegistrationController @Inject()(
+                                        mcc: MessagesControllerComponents,
+                                        nameInputPage: NameInputPage,
+                                        businessNameInputPage: BusinessNameInputPage,
+                                        contactNumberInputPage: ContactNumberInputPage,
+                                        propertyInputPage: PropertyInputPage,
+                                        businessTypeInputPage: BusinessTypeInputPage,
+                                        passwordInputPage: PasswordInputPage,
+                                        resultPage: ResultPage,
+                                        registrationConnector: RegistrationConnector,
+                                        error: ErrorHandler,
+                                        crnPage: CRNPage) extends FrontendController(mcc) with I18nSupport {
 
 
   def InputName: Action[AnyContent] = Action { implicit request =>
-    if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
+    if (request.session.get("crn").isDefined) {
+      Redirect(routes.RegistrationController.home())
+    } else {
       val form: Form[UserName] = request.session.get("name").fold(UserNameForm.submitForm.fill(UserName(""))) { name =>
         UserNameForm.submitForm.fill(UserName(name))
       }
@@ -43,7 +57,9 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
   }
 
   def SubmitInputName: Action[AnyContent] = Action { implicit request =>
-    if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
+    if (request.session.get("crn").isDefined) {
+      Redirect(routes.RegistrationController.home())
+    } else {
       UserNameForm.submitForm.bindFromRequest().fold({ formWithErrors =>
         BadRequest(nameInputPage(formWithErrors))
       }, { formData =>
@@ -54,7 +70,9 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
 
 
   def InputBusinessName: Action[AnyContent] = Action { implicit request =>
-    if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
+    if (request.session.get("crn").isDefined) {
+      Redirect(routes.RegistrationController.home())
+    } else {
       val form: Form[UserBusinessName] = request.session.get("businessName").fold(UserBusinessNameForm.submitForm.fill(UserBusinessName(""))) { business => UserBusinessNameForm.submitForm.fill(UserBusinessName(business))
       }
       Ok(businessNameInputPage(form))
@@ -62,7 +80,9 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
   }
 
   def SubmitInputBusinessName: Action[AnyContent] = Action { implicit request =>
-    if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
+    if (request.session.get("crn").isDefined) {
+      Redirect(routes.RegistrationController.home())
+    } else {
       UserBusinessNameForm.submitForm.bindFromRequest().fold({ formWithErrors =>
         BadRequest(businessNameInputPage(formWithErrors))
       }, { formData =>
@@ -72,7 +92,9 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
   }
 
   def InputContactNumber: Action[AnyContent] = Action { implicit request =>
-    if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
+    if (request.session.get("crn").isDefined) {
+      Redirect(routes.RegistrationController.home())
+    } else {
       val form: Form[UserContactNumber] = request.session.get("contactNumber").fold(UserContactNumberForm.submitForm.fill(UserContactNumber(""))) { contactNumber => UserContactNumberForm.submitForm.fill(UserContactNumber(contactNumber))
       }
       Ok(contactNumberInputPage(form))
@@ -80,7 +102,9 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
   }
 
   def SubmitInputContactNumber: Action[AnyContent] = Action { implicit request =>
-    if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
+    if (request.session.get("crn").isDefined) {
+      Redirect(routes.RegistrationController.home())
+    } else {
       UserContactNumberForm.submitForm.bindFromRequest().fold({ formWithErrors =>
         BadRequest(contactNumberInputPage(formWithErrors))
       }, { formData =>
@@ -90,7 +114,9 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
   }
 
   def InputProperty: Action[AnyContent] = Action { implicit request =>
-    if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
+    if (request.session.get("crn").isDefined) {
+      Redirect(routes.RegistrationController.home())
+    } else {
       val form: Form[UserProperty] = request.session.get("property").fold(UserPropertyForm.submitForm.fill(UserProperty("", ""))) { property =>
         UserPropertyForm.submitForm.fill(UserProperty.decode(property))
       }
@@ -99,7 +125,9 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
   }
 
   def SubmitInputProperty: Action[AnyContent] = Action { implicit request =>
-    if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
+    if (request.session.get("crn").isDefined) {
+      Redirect(routes.RegistrationController.home())
+    } else {
       UserPropertyForm.submitForm.bindFromRequest().fold({ formWithErrors =>
         BadRequest(propertyInputPage(formWithErrors))
       }, { formData =>
@@ -109,7 +137,9 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
   }
 
   def InputBusinessType: Action[AnyContent] = Action { implicit request =>
-    if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
+    if (request.session.get("crn").isDefined) {
+      Redirect(routes.RegistrationController.home())
+    } else {
       val form: Form[UserBusinessType] = request.session.get("businessType").fold(UserBusinessTypeForm.submitForm.fill(UserBusinessType(""))) { business =>
         UserBusinessTypeForm.submitForm.fill(UserBusinessType(business))
       }
@@ -118,7 +148,9 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
   }
 
   def SubmitInputBusinessType: Action[AnyContent] = Action { implicit request =>
-    if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
+    if (request.session.get("crn").isDefined) {
+      Redirect(routes.RegistrationController.home())
+    } else {
       UserBusinessTypeForm.submitForm.bindFromRequest().fold({ formWithErrors =>
         BadRequest(businessTypeInputPage(formWithErrors))
       }, { formData =>
@@ -128,13 +160,17 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
   }
 
   def InputPassword: Action[AnyContent] = Action { implicit request =>
-    if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
+    if (request.session.get("crn").isDefined) {
+      Redirect(routes.RegistrationController.home())
+    } else {
       Ok(passwordInputPage(UserPasswordForm.submitForm.fill(UserPassword("", ""))))
     }
   }
 
   def SubmitInputPassword: Action[AnyContent] = Action { implicit request =>
-    if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
+    if (request.session.get("crn").isDefined) {
+      Redirect(routes.RegistrationController.home())
+    } else {
       UserPasswordForm.submitForm.bindFromRequest().fold({ formWithErrors =>
         BadRequest(passwordInputPage(formWithErrors))
       }, { formData =>
@@ -147,7 +183,9 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
   }
 
   def Summary: Action[AnyContent] = Action { implicit request =>
-    if (request.session.get("crn").isDefined) {Redirect(routes.RegistrationController.home())} else {
+    if (request.session.get("crn").isDefined) {
+      Redirect(routes.RegistrationController.home())
+    } else {
       request.session
       val name: String = request.session.get("name").getOrElse("")
       val business: String = request.session.get("businessName").getOrElse("")
@@ -162,7 +200,9 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
   }
 
   def SummarySubmit: Action[AnyContent] = Action async { implicit request =>
-    if (request.session.get("crn").isDefined) {Future(Redirect(routes.RegistrationController.home()))} else {
+    if (request.session.get("crn").isDefined) {
+      Future(Redirect(routes.RegistrationController.home()))
+    } else {
       val name: String = request.session.get("name").getOrElse("")
       val businessName: String = request.session.get("businessName").getOrElse("")
       val contactNumber: String = request.session.get("contactNumber").getOrElse("")
@@ -174,7 +214,8 @@ class RegistrationController @Inject()(mcc: MessagesControllerComponents, nameIn
       registrationConnector.create(user).map {
         case Some(client) => Ok(crnPage(client)).withSession("crn" -> client.crn, "name" -> client.name)
         case _ => BadRequest
-
+      }.recover {
+        case _ => InternalServerError(error.standardErrorTemplate("Something went wrong", "Something went wrong", "Come back later"))
       }
     }
   }
