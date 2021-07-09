@@ -19,7 +19,7 @@ package uk.gov.hmrc.examplefrontend.Connector
 import play.api.libs.json.{JsObject, Json}
 import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.mvc.ControllerComponents
-import uk.gov.hmrc.examplefrontend.common.UserClientProperties
+import uk.gov.hmrc.examplefrontend.common.{UrlKeys, UserClientProperties}
 import uk.gov.hmrc.examplefrontend.model.{Client, User}
 
 import javax.inject.Inject
@@ -28,11 +28,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class RegistrationConnector @Inject()(ws: WSClient, val controllerComponents: ControllerComponents, val ec: ExecutionContext) {
 
-  val backend: String = "http://localhost:9006"
-  val loginFrontEnd: String = "http://localhost:9008"
-
   def wspost(url: String, jsObject: JsObject): Future[WSResponse] = {
-    ws.url(backend + url).post(jsObject)
+    ws.url(UrlKeys.backend + url).post(jsObject)
   }
 
   def create(user: User): Future[Option[Client]] = {
@@ -45,6 +42,6 @@ class RegistrationConnector @Inject()(ws: WSClient, val controllerComponents: Co
       UserClientProperties.businessType -> user.businessType,
       UserClientProperties.password -> user.password
     )
-    wspost(url = "/register", jsObject = newUser).map { x => Json.fromJson[Client](x.json).asOpt }
+    wspost(url = UrlKeys.register, jsObject = newUser).map { x => Json.fromJson[Client](x.json).asOpt }
   }
 }
