@@ -25,7 +25,7 @@ import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, session, status}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.examplefrontend.Connector.RegistrationConnector
-import uk.gov.hmrc.examplefrontend.common.{ErrorMessages, SessionKeys, UserClientProperties}
+import uk.gov.hmrc.examplefrontend.common.{ErrorMessages, SessionKeys, UrlKeys, UserClientProperties}
 import uk.gov.hmrc.examplefrontend.config.ErrorHandler
 import uk.gov.hmrc.examplefrontend.controllers.RegistrationController
 import uk.gov.hmrc.examplefrontend.model.{Client, User, UserProperty}
@@ -38,19 +38,19 @@ class RegistrationControllerSpec extends AbstractTest {
 
   private val fakeRequestSubmitSummary: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
     method = "GET",
-    path = "/summary-submit")
+    path = UrlKeys.submitPath)
   private val fakeRequestName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
     method = "GET",
-    path = "/name-input")
+    path = UrlKeys.nameInputPath)
   private val fakeRequestSubmitProperty: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
     method = "GET",
-    path = "/property-input")
+    path = UrlKeys.propertyInputPath)
   private val fakeRequestSubmitName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
     method = "GET",
-    path = "/name-input")
+    path = UrlKeys.nameInputPath)
   private val fakeRequestSubmitBusinessName: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
     method = "POST",
-    path = "/business-input")
+    path = UrlKeys.businessInputPath)
 
 
   val name: NameInputPage = app.injector.instanceOf(classOf[NameInputPage])
@@ -97,7 +97,7 @@ class RegistrationControllerSpec extends AbstractTest {
     arn = Option("Arn"))
   private val fakeRequestSummary: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(
     method = "GET",
-    path = "/summary")
+    path = UrlKeys.summaryPath)
     .withSession(
       SessionKeys.name -> user.name,
       SessionKeys.businessName -> user.businessName,

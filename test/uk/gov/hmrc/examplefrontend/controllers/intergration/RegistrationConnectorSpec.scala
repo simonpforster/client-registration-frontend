@@ -21,6 +21,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, post, urlMatc
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import uk.gov.hmrc.examplefrontend.common.UrlKeys
 
 class RegistrationConnectorSpec extends WireMockHelper with BeforeAndAfterEach with Matchers {
 
@@ -35,7 +36,7 @@ class RegistrationConnectorSpec extends WireMockHelper with BeforeAndAfterEach w
 
   "The User" should {
     "send proper request" in {
-      wireMockServer.stubFor(post(urlMatching(s"/register")).willReturn(aResponse().withStatus(201)))
+      wireMockServer.stubFor(post(urlMatching(UrlKeys.register)).willReturn(aResponse().withStatus(201)))
       val result = await(connector.create(user))
       result.get.crn should include("CRN")
     }

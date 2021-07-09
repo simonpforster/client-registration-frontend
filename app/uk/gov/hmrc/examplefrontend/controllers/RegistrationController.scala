@@ -21,7 +21,7 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.examplefrontend.Connector.RegistrationConnector
-import uk.gov.hmrc.examplefrontend.common.{ErrorMessages, UserClientProperties, SessionKeys}
+import uk.gov.hmrc.examplefrontend.common.{ErrorMessages, SessionKeys, UrlKeys, UserClientProperties}
 import uk.gov.hmrc.examplefrontend.config.ErrorHandler
 import uk.gov.hmrc.examplefrontend.model._
 import uk.gov.hmrc.examplefrontend.views.html._
@@ -224,10 +224,10 @@ class RegistrationController @Inject()(
   }
 
   def home: Action[AnyContent] = Action { implicit request =>
-    Redirect("http://localhost:9008/example-frontend/")
+    Redirect(UrlKeys.clientDashboardHome)
   }
 
   def dashboard: Action[AnyContent] = Action { implicit request =>
-    Redirect("http://localhost:9008/example-frontend/dashboard")
+    Redirect(UrlKeys.clientDashboard)
   }
 }
