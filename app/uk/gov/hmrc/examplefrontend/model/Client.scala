@@ -23,7 +23,7 @@ case class Client(
                    name: String,
                    businessName: String,
                    contactNumber: String,
-                   propertyNumber: Int,
+                   propertyNumber: String,
                    postcode: String,
                    businessType: String,
                    arn: Option[String] = None)
