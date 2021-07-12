@@ -212,7 +212,14 @@ class RegistrationController @Inject()(
       val user = User(name, businessName, contactNumber, property.propertyNumber, property.postcode, businessType, password)
 
       registrationConnector.create(user).map {
-        case Some(client) => Ok(crnPage(client)).withSession(SessionKeys.crn -> client.crn, SessionKeys.name -> client.name)
+        case Some(client) => Ok(crnPage(client)).withSession(
+          SessionKeys.crn -> client.crn,
+          SessionKeys.name -> client.name,
+          SessionKeys.businessName -> client.businessName,
+          SessionKeys.property -> UserProperty(client.propertyNumber,client.postcode).encode(),
+          SessionKeys.contactNumber -> client.contactNumber,
+          SessionKeys.businessType -> client.businessType
+        )
         case _ => BadRequest
       }.recover {
         case _ => InternalServerError(error.standardErrorTemplate(
