@@ -37,7 +37,7 @@ class RegistrationConnector @Inject()(ws: WSClient, val controllerComponents: Co
       UserClientProperties.name -> user.name,
       UserClientProperties.businessName -> user.businessName,
       UserClientProperties.contactNumber -> user.contactNumber,
-      UserClientProperties.propertyNumber -> user.propertyNumber.toInt,
+      UserClientProperties.propertyNumber -> user.propertyNumber,
       UserClientProperties.postcode -> user.postcode,
       UserClientProperties.businessType -> user.businessType,
       UserClientProperties.password -> user.password

@@ -91,7 +91,7 @@ class RegistrationControllerSpec extends AbstractTest {
     name = "TestFullName",
     businessName = "TestNameOfBusiness",
     contactNumber = "01111111111111",
-    propertyNumber = 10,
+    propertyNumber = "10",
     postcode = "TestAddress",
     businessType = "Private Limited",
     arn = Option("Arn"))

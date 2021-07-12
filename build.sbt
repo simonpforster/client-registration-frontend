@@ -45,7 +45,7 @@ PlayKeys .devSettings := Seq ("play.server.http.port" -> "9007")
 
 
 lazy val scoverageSettings = Seq(
-  ScoverageKeys.coverageExcludedPackages := "<empty>;Reverse.*;config.*;.*(AuthService|BuildInfo|Routes).*;.*views.html.*",
+  ScoverageKeys.coverageExcludedPackages := "<empty>;Reverse.*;config.*;.*(AuthService|BuildInfo|Routes).*;.*views.html.*;ErrorHandler.scala",
   ScoverageKeys.coverageMinimumStmtTotal := 95,
   ScoverageKeys.coverageFailOnMinimum := true,
   ScoverageKeys.coverageHighlighting := true

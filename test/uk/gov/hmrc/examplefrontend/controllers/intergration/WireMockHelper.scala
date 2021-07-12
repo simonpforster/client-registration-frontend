@@ -29,7 +29,7 @@ import uk.gov.hmrc.examplefrontend.model.{Client, User}
 
 trait WireMockHelper extends AnyWordSpec with GuiceOneAppPerSuite {
 
-  val wiremockPort = 8080
+  val wiremockPort = 9006
   val wiremockHost = "localhost"
 
   val user: User = User(name = "name",
@@ -45,7 +45,7 @@ trait WireMockHelper extends AnyWordSpec with GuiceOneAppPerSuite {
     name = "name",
     businessName = "businessName",
     contactNumber = "10",
-    propertyNumber = 108,
+    propertyNumber = "108",
     postcode = "HA4",
     businessType = "SoleTrader",
     arn = Option(""))

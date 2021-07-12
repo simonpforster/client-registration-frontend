@@ -22,8 +22,18 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.examplefrontend.common.UrlKeys
+import uk.gov.hmrc.examplefrontend.model.Client
 
 class RegistrationConnectorSpec extends WireMockHelper with BeforeAndAfterEach with Matchers {
+
+  val testClient: Client = Client(
+    crn = "testCrn",
+    name = "testName",
+    businessName = "testBusiness",
+    contactNumber = "testContact",
+    propertyNumber = "12",
+    postcode = "testPostcode",
+    businessType = "testBusinessType")
 
   override def beforeEach: Unit = {
     wireMockServer.start()
@@ -36,9 +46,19 @@ class RegistrationConnectorSpec extends WireMockHelper with BeforeAndAfterEach w
 
   "The User" should {
     "send proper request" in {
-      wireMockServer.stubFor(post(urlMatching(UrlKeys.register)).willReturn(aResponse().withStatus(201)))
+      wireMockServer.stubFor(post(urlMatching(UrlKeys.register)).willReturn(aResponse().withStatus(201)
+        .withBody(
+          """{
+            |"crn": "testCrn",
+						|"name": "testName",
+						|"businessName": "testBusinessName",
+						|"contactNumber": "testContactNumber",
+						|"propertyNumber": "testPropertyNumber",
+						|"postcode": "testPostcode",
+						|"businessType": "testBusinessType"}
+            |""".stripMargin)))
       val result = await(connector.create(user))
-      result.get.crn should include("CRN")
+      result.get.crn should include("testCrn")
     }
   }
 }
