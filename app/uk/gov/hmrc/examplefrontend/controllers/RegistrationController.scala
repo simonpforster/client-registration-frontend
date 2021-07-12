@@ -216,7 +216,8 @@ class RegistrationController @Inject()(
           SessionKeys.crn -> client.crn,
           SessionKeys.name -> client.name,
           SessionKeys.businessName -> client.businessName,
-          SessionKeys.property -> UserProperty(client.propertyNumber,client.postcode).encode(),
+          SessionKeys.postcode -> client.propertyNumber,
+          SessionKeys.propertyNumber -> client.postcode,
           SessionKeys.contactNumber -> client.contactNumber,
           SessionKeys.businessType -> client.businessType
         )
