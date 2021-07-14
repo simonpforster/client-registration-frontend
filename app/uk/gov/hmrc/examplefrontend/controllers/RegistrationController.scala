@@ -151,8 +151,9 @@ class RegistrationController @Inject()(
     if (request.session.get(SessionKeys.crn).isDefined) {
       Redirect(routes.RegistrationController.home())
     } else {
-      UserBusinessTypeForm.submitForm.bindFromRequest().fold({ formWithErrors =>
-        BadRequest(businessTypeInputPage(formWithErrors))
+      UserBusinessTypeForm.submitForm.bindFromRequest().fold({ _ =>
+        val form = UserBusinessTypeForm.submitForm.fill(UserBusinessType("")).withError(UserClientProperties.businessType, ErrorMessages.businessTypeFormError)
+        BadRequest(businessTypeInputPage(form))
       }, { formData =>
         Redirect(routes.RegistrationController.InputPassword()).withSession(request.session + (SessionKeys.businessType -> formData.businessType))
       })
@@ -176,7 +177,7 @@ class RegistrationController @Inject()(
       }, { formData =>
         formData.password match {
           case formData.passwordCheck => Redirect(routes.RegistrationController.Summary()).withSession(request.session + (SessionKeys.password -> formData.password))
-          case _ => BadRequest(passwordInputPage(UserPasswordForm.submitForm.fill(UserPassword("", "")).withError(UserClientProperties.passwordCheck, "password does not match")))
+          case _ => BadRequest(passwordInputPage(UserPasswordForm.submitForm.fill(UserPassword("", "")).withError(UserClientProperties.passwordCheck, ErrorMessages.passwordMatch)))
         }
       })
     }
