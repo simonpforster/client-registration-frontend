@@ -8,9 +8,12 @@
 <h1 class="govuk-heading-xl" id="Name Value">Enter Name</h1>
 @if(form.errors.nonEmpty){
 
-<span id="passport-issued-error" class="govuk-error-message">
-    <span class="govuk-visually-hidden">Error:</span> Please enter full name
-</span>
+@defining(form.errors.map { error =>
+    ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))}) { errorLinks =>
+    @govukErrorSummary(ErrorSummary(
+    errorList = errorLinks,
+    title = Text(messages("Ensure your name is not empty"))))
+    }
 }
 
 <a href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.home" class="govuk-back-link">Back</a>

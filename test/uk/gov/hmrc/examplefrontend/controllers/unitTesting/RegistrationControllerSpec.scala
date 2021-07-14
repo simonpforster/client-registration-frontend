@@ -340,7 +340,7 @@ class RegistrationControllerSpec extends AbstractTest {
     "return redirect home" in {
       val result: Future[Result] = controller.SubmitInputProperty(fakeRequestSubmitProperty.withSession(
         SessionKeys.crn -> client.crn,
-        SessionKeys.property -> UserProperty(client.propertyNumber.toString, client.postcode).encode()))
+        SessionKeys.property -> UserProperty(client.propertyNumber, client.postcode).encode()))
       status(result) shouldBe Status.SEE_OTHER
     }
     "return 303" in {

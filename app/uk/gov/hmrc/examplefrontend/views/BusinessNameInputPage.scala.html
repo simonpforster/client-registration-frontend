@@ -7,17 +7,19 @@
 @layout(pageTitle = Some("Enter Business Name")) {
 <h1 class="govuk-heading-xl" id="Name Value">Enter Business Name</h1>
 @if(form.errors.nonEmpty){
-
-<span id="passport-issued-error" class="govuk-error-message">
-    <span class="govuk-visually-hidden">Error:</span> Please enter your business name in the field below.
-</span>
+@defining(form.errors.map { error =>
+ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))}) { errorLinks =>
+    @govukErrorSummary(ErrorSummary(
+    errorList = errorLinks,
+    title = Text(messages("Ensure the Business name is not empty"))))
+    }
 }
 <a href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.InputName" class="govuk-back-link">Back</a>
 @helper.form(action = uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.SubmitInputBusinessName,'class -> "govuk-body"){
 @if(form.errors("businessName").nonEmpty){
-    @govukInput(Input(id = "business-name", name = "businessName", value = Some(form.data("businessName")), label = Label(content = Text("Business Name:")), hint = Some(Hint(content = Text("Enter the name of your business, this cannot be changed once chosen, for example - 'McDonalds'"))), errorMessage = Some(ErrorMessage(content = Text("Please provide your company name")))))
+    @govukInput(Input(id = "business-name", name = "businessName", value = Some(form.data("businessName")), label = Label(content = Text("Business Name:")), hint = Some(Hint(content = Text("Enter the name of your business, this cannot be changed once submitted at the end, for example - 'McDonalds'"))), errorMessage = Some(ErrorMessage(content = Text("Please provide your businesses name")))))
 }else{
-    @govukInput(Input(id = "business-name", name = "businessName", value = Some(form.data("businessName")), hint = Some(Hint(content = Text("Enter the name of your business, this cannot be changed once chosen, for example - 'McDonalds'"))), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("Business Name:"))))
+    @govukInput(Input(id = "business-name", name = "businessName", value = Some(form.data("businessName")), hint = Some(Hint(content = Text("Enter the name of your business, this cannot be changed once submitted at the end, for example - 'McDonalds'"))), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("Business Name:"))))
 }
 <button class="govuk-button" id="submit" data-module="govuk-button" type="submit">Next</button>
 }

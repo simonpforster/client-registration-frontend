@@ -7,16 +7,18 @@
 @layout(pageTitle = Some("Enter Contact Number")) {
 <h1 class="govuk-heading-xl" id="Name Value">Enter Contact Number</h1>
 @if(form.errors.nonEmpty){
-
-<span id="passport-issued-error" class="govuk-error-message">
-    <span class="govuk-visually-hidden">Error:</span> Please enter full Contact Number
-</span>
+@defining(form.errors.map { error =>
+    ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))}) { errorLinks =>
+    @govukErrorSummary(ErrorSummary(
+    errorList = errorLinks,
+    title = Text(messages("Ensure a correct phone number is entered"))))
+    }
 }
 
 <a href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.InputBusinessName" class="govuk-back-link">Back</a>
 @helper.form(action = uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.SubmitInputContactNumber,'class -> "govuk-body"){
 @if(form.errors("contactNumber").nonEmpty){
-    @govukInput(Input(id = "contact-number",inputType = "number", name = "contactNumber", value = Some(form.data("contactNumber")), label = Label(content = Text("Contact Number:")), hint = Some(Hint(content = Text("The phone number you prefer to be contacted on, for example - '01615555555'"))), errorMessage = Some(ErrorMessage(content = Text("Please provide a valid number")))))
+    @govukInput(Input(id = "contact-number",inputType = "number", name = "contactNumber", value = Some(form.data("contactNumber")), label = Label(content = Text("Contact Number:")), hint = Some(Hint(content = Text("The phone number you prefer to be contacted on, for example - '01615555555'"))), errorMessage = Some(ErrorMessage(content = Text("Please enter a valid contact number")))))
 }else{
     @govukInput(Input(id = "contact-number" ,inputType = "number", name = "contactNumber", value = Some(form.data("contactNumber")), hint = Some(Hint(content = Text("The phone number you prefer to be contacted on, for example - '01615555555'"))), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("Contact Number:"))))
 }

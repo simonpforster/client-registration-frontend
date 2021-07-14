@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.examplefrontend.model
 
-import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText}
-import uk.gov.hmrc.examplefrontend.common.UserClientProperties
+import play.api.data.Forms.mapping
+import play.api.data.{Form, Forms}
+import uk.gov.hmrc.examplefrontend.common.{ErrorMessages, UserClientProperties}
 
 
 case class UserName(name: String)
@@ -27,7 +27,7 @@ object UserNameForm {
   val submitForm: Form[UserName] =
     Form(
       mapping(
-        UserClientProperties.name -> nonEmptyText
+        UserClientProperties.name -> Forms.text.verifying(ErrorMessages.nameFormError, _.nonEmpty)
       )(UserName.apply)(UserName.unapply)
     )
 }
@@ -38,7 +38,7 @@ object UserBusinessNameForm {
   val submitForm: Form[UserBusinessName] =
     Form(
       mapping(
-        UserClientProperties.businessName -> nonEmptyText
+        UserClientProperties.businessName -> Forms.text.verifying(ErrorMessages.businessNameFormError, _.nonEmpty)
       )(UserBusinessName.apply)(UserBusinessName.unapply)
     )
 }
@@ -49,7 +49,7 @@ object UserContactNumberForm {
   val submitForm: Form[UserContactNumber] =
     Form(
       mapping(
-        UserClientProperties.contactNumber -> nonEmptyText(minLength = 10)
+        UserClientProperties.contactNumber -> Forms.text.verifying(ErrorMessages.contactNumberFormError, _.length >= 10)
       )(UserContactNumber.apply)(UserContactNumber.unapply)
     )
 }
@@ -73,8 +73,8 @@ object UserPropertyForm {
   val submitForm: Form[UserProperty] =
     Form(
       mapping(
-        UserClientProperties.propertyNumber -> nonEmptyText,
-        UserClientProperties.postcode -> nonEmptyText
+        UserClientProperties.propertyNumber -> Forms.text.verifying(ErrorMessages.propertyNumberFormError, _.nonEmpty),
+        UserClientProperties.postcode -> Forms.text.verifying(ErrorMessages.postcodeFormError, _.isEmpty == false)
       )(UserProperty.apply)(UserProperty.unapply)
     )
 }
@@ -86,21 +86,19 @@ object UserBusinessTypeForm {
   val submitForm: Form[UserBusinessType] =
     Form(
       mapping(
-        UserClientProperties.businessType -> nonEmptyText,
+        UserClientProperties.businessType -> Forms.text.verifying(ErrorMessages.businessTypeFormError, _.nonEmpty),
       )(UserBusinessType.apply)(UserBusinessType.unapply)
     )
 }
 
-
 case class UserPassword(password: String, passwordCheck: String)
-
 
 object UserPasswordForm {
   val submitForm: Form[UserPassword] =
     Form(
       mapping(
-        UserClientProperties.password -> nonEmptyText,
-        UserClientProperties.passwordCheck -> nonEmptyText
+        UserClientProperties.password -> Forms.text.verifying(ErrorMessages.passwordFormError, _.nonEmpty),
+        UserClientProperties.passwordCheck -> Forms.text.verifying(ErrorMessages.passwordCheckFormError, _.isEmpty == false)
       )(UserPassword.apply)(UserPassword.unapply)
     )
 

@@ -8,9 +8,12 @@
 <h1 class="govuk-heading-xl" id="Name Value">Please select your business type:</h1>
 @if(form.errors.nonEmpty){
 
-<span id="passport-issued-error" class="govuk-error-message">
-          <span class="govuk-visually-hidden">Error:</span> Please select your business type:
-        </span>
+@defining(form.errors.map { error =>
+    ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))}) { errorLinks =>
+    @govukErrorSummary(ErrorSummary(
+    errorList = errorLinks,
+    title = Text(messages("Please select your business type"))))
+    }
 }
 
 <a href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.InputProperty" class="govuk-back-link">Back</a>
