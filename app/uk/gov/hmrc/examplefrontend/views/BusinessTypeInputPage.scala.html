@@ -5,6 +5,8 @@
 @(form: Form[UserBusinessType])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Select Business Type")) {
+<a href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.InputProperty" class="govuk-back-link">Back</a>
+
 <h1 class="govuk-heading-xl" id="Name Value">Please select your business type:</h1>
 @if(form.errors.nonEmpty){
 
@@ -15,8 +17,6 @@
     title = Text(messages("Please select your business type"))))
     }
 }
-
-<a href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.InputProperty" class="govuk-back-link">Back</a>
 
 @helper.form(action = uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.SubmitInputBusinessType,'class -> "govuk-body"){
 <div class="govuk-form-group">
