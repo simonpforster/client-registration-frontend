@@ -97,8 +97,8 @@ object UserPasswordForm {
   val submitForm: Form[UserPassword] =
     Form(
       mapping(
-        UserClientProperties.password -> Forms.text.verifying(ErrorMessages.passwordFormError, _.nonEmpty),
-        UserClientProperties.passwordCheck -> Forms.text.verifying(ErrorMessages.passwordCheckFormError, _.isEmpty == false)
+        UserClientProperties.password -> Forms.text.verifying(ErrorMessages.passwordFormError, _.length >= 10),
+        UserClientProperties.passwordCheck -> Forms.text.verifying(ErrorMessages.passwordCheckFormError, _.length >= 10)
       )(UserPassword.apply)(UserPassword.unapply)
     )
 
