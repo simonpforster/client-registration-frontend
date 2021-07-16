@@ -6,9 +6,7 @@
 @layout(pageTitle = Some("Application Complete")) {
 
 
-<h1 class="govuk-heading-xl">Successfully Added User:</h1>
-
-
+<h1 class="govuk-heading-xl">Account successfully created</h1>
 <div class="govuk-width-container">
     <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
         <div class="govuk-grid-row">
@@ -21,61 +19,9 @@
                         Your reference number<br><strong id="crn">@result.crn</strong>
                     </div>
                 </div>
-
                 <p class="govuk-body">We have sent you a confirmation email.</p>
                 <p class="govuk-body">Please Remember this Number as it will be used for authentication.</p>
             </div>
-
-
-            <form action="example/NameInput">
-                <h4 class="govuk-heading-l">Your details:</h4>
-                <dl class="govuk-summary-list">
-
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Name
-                        </dt>
-                        <dd class="govuk-summary-list__value" id="name-value">
-                            @result.name
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Business Name
-                        </dt>
-                        <dd class="govuk-summary-list__value" id="business-name-value">
-                            @result.businessName
-                        </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Contact Number:
-                        </dt>
-                        <dd class="govuk-summary-list__value" id="contact-value">
-                            @result.contactNumber
-                        </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Property
-                        </dt>
-                        <dd class="govuk-summary-list__value" id="address-value">
-                            <p class="govuk-body">@result.propertyNumber @result.postcode</p>
-                        </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            Business Type
-                        </dt>
-                        <dd class="govuk-summary-list__value" id="business-type-value">
-                            <p class="govuk-body">@result.businessType</p>
-                        </dd>
-                    </div>
-                </dl>
-            </form>
         </div>
     </main>
 </div>

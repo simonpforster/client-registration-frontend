@@ -1,7 +1,7 @@
 service.name = example-frontend
 service.text = This is your new service
 
-service.name = Personal Details
+service.name = Client Services
 service.text = Welcome to the user entry front-end service
 service.nameEntry = Please enter your name
 service.extraDetails = Please enter Date of birth and Job Title

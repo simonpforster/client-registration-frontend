@@ -5,6 +5,8 @@
 @(form: Form[UserProperty])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Enter Address")) {
+<a href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.InputContactNumber" class="govuk-back-link">Back</a>
+
 <h1 class="govuk-heading-xl"  id="Name Value">Enter Property number and address</h1>
 @if(form.errors.nonEmpty){
 @defining(form.errors.map { error =>
@@ -15,7 +17,6 @@
     }
 }
 
-<a href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.InputContactNumber" class="govuk-back-link">Back</a>
 @helper.form(action = uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.SubmitInputProperty,'class -> "govuk-body"){
 @if(form.errors("propertyNumber").nonEmpty){
     @govukInput(Input(id = "property-number", name = "propertyNumber", value = Some(form.data("propertyNumber")), label = Label(content = Text("Property Number:")), hint = Some(Hint(content = Text("The house number you live at, for example - '103b'"))), errorMessage = Some(ErrorMessage(content = Text("Please provide a valid house number")))))
