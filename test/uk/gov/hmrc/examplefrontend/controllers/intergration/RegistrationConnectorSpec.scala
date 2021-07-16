@@ -21,19 +21,19 @@ import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, post, urlMatc
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
-import uk.gov.hmrc.examplefrontend.common.UrlKeys
+import uk.gov.hmrc.examplefrontend.common.{UrlKeys, UserClientProperties}
 import uk.gov.hmrc.examplefrontend.model.Client
 
 class RegistrationConnectorSpec extends WireMockHelper with BeforeAndAfterEach with Matchers {
 
   val testClient: Client = Client(
     crn = "testCrn",
-    name = "testName",
-    businessName = "testBusiness",
-    contactNumber = "testContact",
-    propertyNumber = "12",
-    postcode = "testPostcode",
-    businessType = "testBusinessType")
+    name = user.name,
+    businessName = user.businessName,
+    contactNumber = user.contactNumber,
+    propertyNumber = user.propertyNumber,
+    postcode = user.postcode,
+    businessType = user.businessType)
 
   override def beforeEach: Unit = {
     wireMockServer.start()
@@ -48,17 +48,17 @@ class RegistrationConnectorSpec extends WireMockHelper with BeforeAndAfterEach w
     "send proper request" in {
       wireMockServer.stubFor(post(urlMatching(UrlKeys.register)).willReturn(aResponse().withStatus(201)
         .withBody(
-          """{
-            |"crn": "testCrn",
-						|"name": "testName",
-						|"businessName": "testBusinessName",
-						|"contactNumber": "testContactNumber",
-						|"propertyNumber": "testPropertyNumber",
-						|"postcode": "testPostcode",
-						|"businessType": "testBusinessType"}
+          s"""{
+            |"${UserClientProperties.crn}": "${testClient.crn}",
+						|"${UserClientProperties.name}": "${testClient.name}",
+						|"${UserClientProperties.businessName}": "${testClient.businessName}",
+						|"${UserClientProperties.contactNumber}": "${testClient.contactNumber}",
+						|"${UserClientProperties.propertyNumber}": "${testClient.propertyNumber}",
+						|"${UserClientProperties.postcode}": "${testClient.postcode}",
+						|"${UserClientProperties.businessType}": "${testClient.businessType}"}
             |""".stripMargin)))
-      val result = await(connector.create(user))
-      result.get.crn should include("testCrn")
+      val result: Option[Client] = await(connector.create(user))
+      result shouldBe Some(testClient)
     }
   }
 }
