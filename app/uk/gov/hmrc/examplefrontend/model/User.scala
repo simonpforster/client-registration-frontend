@@ -79,7 +79,6 @@ object UserPropertyForm {
     )
 }
 
-//(soleTrader:String, partnership:String, limitedCompany:String,other:String)
 case class UserBusinessType(businessType: String)
 
 object UserBusinessTypeForm {
@@ -101,7 +100,6 @@ object UserPasswordForm {
         UserClientProperties.passwordCheck -> Forms.text.verifying(ErrorMessages.passwordCheckFormError, _.length >= 10)
       )(UserPassword.apply)(UserPassword.unapply)
     )
-
 }
 
 case class User(name: String,

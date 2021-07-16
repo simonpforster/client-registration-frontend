@@ -42,9 +42,9 @@ trait WireMockHelper extends AnyWordSpec with GuiceOneAppPerSuite {
 
   val client: Client = Client(
     crn = "",
-    name = "name",
-    businessName = "businessName",
-    contactNumber = "10",
+    name = user.name,
+    businessName = user.businessName,
+    contactNumber = user.contactNumber,
     propertyNumber = "108",
     postcode = "HA4",
     businessType = "SoleTrader",

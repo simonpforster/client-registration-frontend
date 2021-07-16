@@ -22,7 +22,6 @@ object UrlKeys {
   final val clientDashboard: String = "http://localhost:9008/client/dashboard"
 
   final val register: String = "/register"
-
   final val summaryPath: String = "/summary"
   final val submitPath: String = "/summary-submit"
   final val nameInputPath: String = "/name-input"
