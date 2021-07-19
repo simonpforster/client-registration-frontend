@@ -26,6 +26,9 @@ object UrlKeys {
   final val nameInputPath: String = "/name-input"
   final val propertyInputPath: String = "/property-input"
   final val businessInputPath: String = "/business-input"
+  final val businessTypeInputPath: String = "/business-type"
+  final val passwordInputPath: String = "/password-input"
+  final val contactInputPath: String = "/contact-number-input"
 
   def clientDashboard(crn : String): String = "http://localhost:9008/client/" + crn + "dashboard"
 

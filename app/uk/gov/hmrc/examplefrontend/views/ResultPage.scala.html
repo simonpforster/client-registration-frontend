@@ -4,7 +4,7 @@
 @(result:User)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Summary")) {
-<a href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.InputPassword" class="govuk-back-link">Back</a>
+<a href="@uk.gov.hmrc.examplefrontend.controllers.routes.PasswordController.InputPassword" class="govuk-back-link">Back</a>
 <h1 class="govuk-heading-xl">User Info</h1>
 <div id="with-hint-hint" class="govuk-hint">
     Below are the details you entered. If these are correct press submit to continue or back to alter details.
@@ -75,6 +75,6 @@
 
     </dl>
     <a class="govuk-button" data-module="govuk-button" id="submit" type="submit"
-       href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.SummarySubmit">Submit</a>
+       href="@uk.gov.hmrc.examplefrontend.controllers.routes.SummaryController.SummarySubmit">Submit</a>
 </form>
 }
