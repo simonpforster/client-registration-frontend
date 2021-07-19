@@ -17,7 +17,7 @@
 package uk.gov.hmrc.examplefrontend.common
 
 object UrlKeys {
-  final val backend: String = "http://localhost:9006"
+  final val backend: String = "http://localhost:9006/clients"
   final val clientDashboardHome: String = "http://localhost:9008/client/"
 
   final val register: String = "/register"
