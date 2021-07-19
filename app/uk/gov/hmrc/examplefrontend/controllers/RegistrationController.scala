@@ -211,7 +211,6 @@ class RegistrationController @Inject()(
       val businessType: String = request.session.get(SessionKeys.businessType).getOrElse("")
       val password: String = request.session.get(SessionKeys.password).getOrElse("")
       val user = User(name, businessName, contactNumber, property.propertyNumber, property.postcode, businessType, password)
-
       registrationConnector.create(user).map {
         case Some(client) => Ok(crnPage(client)).withSession(
           SessionKeys.crn -> client.crn,
@@ -237,6 +236,6 @@ class RegistrationController @Inject()(
   }
 
   def dashboard: Action[AnyContent] = Action { implicit request =>
-    Redirect(UrlKeys.clientDashboard)
+    Redirect(UrlKeys.clientDashboard(request.session.get(SessionKeys.crn).getOrElse(""))).withNewSession
   }
 }

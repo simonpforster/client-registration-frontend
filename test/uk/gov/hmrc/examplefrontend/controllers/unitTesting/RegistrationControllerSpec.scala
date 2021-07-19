@@ -253,7 +253,7 @@ class RegistrationControllerSpec extends AbstractTest {
 
   "Redirect Dashboard" should {
     "return 303" in {
-      val result: Future[Result] = controller.dashboard(fakeRequestName)
+      val result: Future[Result] = controller.dashboard(fakeRequestName.withSession(SessionKeys.crn -> client.crn))
       status(result) shouldBe Status.SEE_OTHER
     }
   }
