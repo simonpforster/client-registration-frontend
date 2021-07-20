@@ -93,7 +93,7 @@ class PasswordControllerSpec extends AbstractTest {
     }
     "return Bad Request with passwords not matching" in {
       val result: Future[Result] = controller.SubmitInputPassword(fakeRequestPOST.withFormUrlEncodedBody(
-        UserClientProperties.password -> "badPass",
+        UserClientProperties.password -> "badPassword",
         UserClientProperties.passwordCheck -> passwordValue))
       status(result) shouldBe Status.BAD_REQUEST
     }

@@ -46,8 +46,10 @@ class PasswordController @Inject()(
         BadRequest(passwordInputPage(formWithErrors))
       }, { formData =>
         formData.password match {
-          case formData.passwordCheck => Redirect(routes.SummaryController.Summary()).withSession(request.session + (SessionKeys.password -> formData.password))
-          case _ => BadRequest(passwordInputPage(UserPasswordForm.submitForm.fill(UserPassword("", "")).withError(UserClientProperties.passwordCheck, ErrorMessages.passwordMatch)))
+          case formData.passwordCheck => Redirect(routes.SummaryController.Summary())
+            .withSession(request.session + (SessionKeys.password -> formData.password))
+          case _ => BadRequest(passwordInputPage(UserPasswordForm.submitForm.fill(UserPassword("", ""))
+            .withError(UserClientProperties.passwordCheck, ErrorMessages.passwordMatch)))
         }
       })
     }
