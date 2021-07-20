@@ -46,7 +46,7 @@ class RegistrationConnectorSpec extends WireMockHelper with BeforeAndAfterEach w
 
   "The User" should {
     "send proper request" in {
-      wireMockServer.stubFor(post(urlMatching(UrlKeys.register)).willReturn(aResponse().withStatus(201)
+      wireMockServer.stubFor(post(urlMatching(UrlKeys.clients + UrlKeys.register)).willReturn(aResponse().withStatus(201)
         .withBody(
           s"""{
             |"${UserClientProperties.crn}": "${testClient.crn}",

@@ -83,7 +83,8 @@ class BusinessTypeControllerSpec extends AbstractTest {
       session(result).get(SessionKeys.businessType).getOrElse("") shouldBe businessTypeValue
     }
     "return Bad Request" in {
-      val result: Future[Result] = controller.SubmitInputBusinessType(fakeRequestPOST.withFormUrlEncodedBody())
+      val result: Future[Result] = controller.SubmitInputBusinessType(fakeRequestPOST.withFormUrlEncodedBody(
+        UserClientProperties.businessType -> ""))
       status(result) shouldBe Status.BAD_REQUEST
     }
   }

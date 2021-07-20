@@ -19,7 +19,7 @@ package uk.gov.hmrc.examplefrontend.controllers
 
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.examplefrontend.common.{SessionKeys, UrlKeys}
+import uk.gov.hmrc.examplefrontend.common.UrlKeys
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
@@ -35,6 +35,6 @@ class RegistrationController @Inject()(
   }
 
   def dashboard: Action[AnyContent] = Action { implicit request =>
-    Redirect(UrlKeys.clientDashboard(request.session.get(SessionKeys.crn).getOrElse(""))).withNewSession
+    Redirect(UrlKeys.clientDashboard)
   }
 }

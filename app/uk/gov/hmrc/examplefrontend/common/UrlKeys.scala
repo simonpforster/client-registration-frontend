@@ -19,6 +19,7 @@ package uk.gov.hmrc.examplefrontend.common
 object UrlKeys {
   final val backend: String = "http://localhost:9006/clients"
   final val clientDashboardHome: String = "http://localhost:9008/client/"
+  final val clients: String = "/clients"
 
   final val register: String = "/register"
   final val summaryPath: String = "/summary"
@@ -29,7 +30,6 @@ object UrlKeys {
   final val businessTypeInputPath: String = "/business-type"
   final val passwordInputPath: String = "/password-input"
   final val contactInputPath: String = "/contact-number-input"
-
-  def clientDashboard(crn : String): String = "http://localhost:9008/client/" + crn + "dashboard"
+  final val clientDashboard: String = "http://localhost:9008/client/dashboard"
 
 }
