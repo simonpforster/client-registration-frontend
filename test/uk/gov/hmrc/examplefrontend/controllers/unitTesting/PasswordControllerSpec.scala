@@ -50,15 +50,15 @@ class PasswordControllerSpec extends AbstractTest {
 
   "InputPassword GET" should {
     "return 200" in {
-      val result = controller.InputPassword(fakeRequestGET)
+      val result = controller.InputPassword(isUpdate=false).apply(fakeRequestGET)
       status(result) shouldBe Status.OK
     }
     "return html" in {
-      val result: Future[Result] = controller.InputPassword(fakeRequestGET)
+      val result: Future[Result] = controller.InputPassword(isUpdate=false).apply(fakeRequestGET)
       contentType(result) shouldBe Some(htmlContentType)
     }
     "return redirect home" in {
-      val result: Future[Result] = controller.InputPassword(
+      val result: Future[Result] = controller.InputPassword(isUpdate=false).apply(
         fakeRequestGET.withSession(SessionKeys.crn -> crnTest))
       status(result) shouldBe Status.SEE_OTHER
     }
@@ -66,7 +66,7 @@ class PasswordControllerSpec extends AbstractTest {
 
   "SubmitInputPassword POST" should {
     "return redirect home" in {
-      val result: Future[Result] = controller.SubmitInputPassword(fakeRequestPOST
+      val result: Future[Result] = controller.SubmitInputPassword(isUpdate=false).apply(fakeRequestPOST
         .withSession(
           SessionKeys.crn -> crnTest,
           SessionKeys.password -> passwordValue,
@@ -74,32 +74,32 @@ class PasswordControllerSpec extends AbstractTest {
       status(result) shouldBe Status.SEE_OTHER
     }
     "return 303" in {
-      val result = controller.SubmitInputPassword(fakeRequestPOST.withFormUrlEncodedBody(
+      val result = controller.SubmitInputPassword(isUpdate=false).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.password -> passwordValue,
         UserClientProperties.passwordCheck -> passwordValue))
       status(result) shouldBe Status.SEE_OTHER
     }
     "redirect with session" in {
-      val result = controller.SubmitInputPassword(fakeRequestPOST.withFormUrlEncodedBody(
+      val result = controller.SubmitInputPassword(isUpdate=false).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.password -> passwordValue,
         UserClientProperties.passwordCheck -> passwordValue))
       session(result).get(SessionKeys.password).get shouldBe passwordValue
     }
     "return Bad Request" in {
-      val result: Future[Result] = controller.SubmitInputPassword(fakeRequestPOST.withFormUrlEncodedBody(
+      val result: Future[Result] = controller.SubmitInputPassword(isUpdate=false).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.password -> "",
         UserClientProperties.passwordCheck -> passwordValue))
       status(result) shouldBe Status.BAD_REQUEST
     }
     "return Bad Request with passwords not matching" in {
-      val result: Future[Result] = controller.SubmitInputPassword(fakeRequestPOST.withFormUrlEncodedBody(
+      val result: Future[Result] = controller.SubmitInputPassword(isUpdate=false).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.password -> "badPassword",
         UserClientProperties.passwordCheck -> passwordValue))
       status(result) shouldBe Status.BAD_REQUEST
     }
 
     "returns Bad Request and form with errors when there are no values" in {
-      val result: Future[Result] = controller.SubmitInputPassword(fakeRequestPOST.withFormUrlEncodedBody(
+      val result: Future[Result] = controller.SubmitInputPassword(isUpdate=false).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.password -> "",
         UserClientProperties.passwordCheck -> ""))
       status(result) shouldBe Status.BAD_REQUEST

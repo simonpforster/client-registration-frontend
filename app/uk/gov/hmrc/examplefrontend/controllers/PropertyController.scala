@@ -31,7 +31,7 @@ class PropertyController @Inject()(
                                   )
   extends FrontendController(mcc) {
 
-  def InputProperty: Action[AnyContent] = Action { implicit request =>
+  def InputProperty(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
     if (request.session.get(SessionKeys.crn).isDefined) {
       Redirect(routes.RegistrationController.home())
     } else {
@@ -39,19 +39,24 @@ class PropertyController @Inject()(
         .fold(UserPropertyForm.submitForm.fill(UserProperty("", ""))) {
         property => UserPropertyForm.submitForm.fill(UserProperty.decode(property))
       }
-      Ok(propertyInputPage(form))
+      Ok(propertyInputPage(form,isUpdate))
     }
   }
 
-  def SubmitInputProperty: Action[AnyContent] = Action { implicit request =>
+  def SubmitInputProperty(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
     if (request.session.get(SessionKeys.crn).isDefined) {
       Redirect(routes.RegistrationController.home())
     } else {
       UserPropertyForm.submitForm.bindFromRequest().fold({ formWithErrors =>
-        BadRequest(propertyInputPage(formWithErrors))
-      }, { formData =>
-        Redirect(routes.BusinessTypeController.InputBusinessType())
+        BadRequest(propertyInputPage(formWithErrors,isUpdate))
+      },{ formData => if(isUpdate) {
+        Redirect(routes.SummaryController.Summary(isUpdate)).withSession(request.session + (SessionKeys.property -> formData.encode()))
+      }
+        else {
+        Redirect(routes.BusinessTypeController.InputBusinessType(isUpdate))
           .withSession(request.session + (SessionKeys.property -> formData.encode()))
+      }
+
       })
     }
   }

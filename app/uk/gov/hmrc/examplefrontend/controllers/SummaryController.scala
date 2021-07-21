@@ -38,7 +38,7 @@ class SummaryController @Inject()(
                                  )
   extends FrontendController(mcc) with I18nSupport {
 
-  def Summary: Action[AnyContent] = Action { implicit request =>
+  def Summary(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
     if (request.session.get(SessionKeys.crn).isDefined) {
       Redirect(routes.RegistrationController.home())
     } else {
@@ -50,8 +50,7 @@ class SummaryController @Inject()(
       val businessType: String = request.session.get(SessionKeys.businessType).getOrElse("")
       val password: String = request.session.get(SessionKeys.password).getOrElse("")
       val result = User(name, business, contact, property.propertyNumber, property.postcode, businessType, password)
-
-      Ok(resultPage(result))
+      Ok(resultPage(result,isUpdate))
     }
   }
 

@@ -87,11 +87,11 @@ class SummaryControllerSpec extends AbstractTest {
 
   "Summary GET" should {
     "return 200" in {
-      val result: Future[Result] = controller.Summary(fakeRequestSummary)
+      val result: Future[Result] = controller.Summary(isUpdate=false).apply(fakeRequestSummary)
       status(result) shouldBe Status.OK
     }
     "return html" in {
-      val result: Future[Result] = controller.Summary(fakeRequestSummary)
+      val result: Future[Result] = controller.Summary(isUpdate=false).apply(fakeRequestSummary)
       contentType(result) shouldBe Some(htmlContentType)
       val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("name-value").text() shouldBe user.name
@@ -103,7 +103,7 @@ class SummaryControllerSpec extends AbstractTest {
 
     }
     "return redirect home" in {
-      val result: Future[Result] = controller.Summary(fakeRequestSummary.withSession(SessionKeys.crn -> client.crn))
+      val result: Future[Result] = controller.Summary(isUpdate=false).apply(fakeRequestSummary.withSession(SessionKeys.crn -> client.crn))
       status(result) shouldBe Status.SEE_OTHER
     }
   }

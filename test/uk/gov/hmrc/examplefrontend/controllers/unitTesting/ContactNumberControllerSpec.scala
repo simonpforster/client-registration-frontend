@@ -52,20 +52,20 @@ class ContactNumberControllerSpec extends AbstractTest {
 
   "InputContactNumber GET" should {
     "return 200" in {
-      val result: Future[Result] = controller.InputContactNumber(fakeRequestGET)
+      val result: Future[Result] = controller.InputContactNumber(isUpdate=false).apply(fakeRequestGET)
       status(result) shouldBe Status.OK
     }
     "return html" in {
-      val result: Future[Result] = controller.InputContactNumber(fakeRequestGET)
+      val result: Future[Result] = controller.InputContactNumber(isUpdate=false).apply(fakeRequestGET)
       contentType(result) shouldBe Some(htmlContentType)
     }
     "return redirect home" in {
-      val result: Future[Result] = controller.InputContactNumber(
+      val result: Future[Result] = controller.InputContactNumber(isUpdate=false).apply(
         fakeRequestGET.withSession(SessionKeys.crn -> crnTest))
       status(result) shouldBe Status.SEE_OTHER
     }
     "pre populate the form with session" in {
-      val result: Future[Result] = controller.InputContactNumber(
+      val result: Future[Result] = controller.InputContactNumber(isUpdate=false).apply(
         fakeRequestGET.withSession(SessionKeys.contactNumber -> contactNumberValue))
       val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("contact-number").`val` shouldBe contactNumberValue
@@ -74,23 +74,28 @@ class ContactNumberControllerSpec extends AbstractTest {
 
   "SubmitInputContactNumber POST" should {
     "return redirect home" in {
-      val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestPOST.withSession(
+      val result: Future[Result] = controller.SubmitInputContactNumber(isUpdate=false).apply(fakeRequestPOST.withSession(
         SessionKeys.crn -> crnTest,
         SessionKeys.contactNumber -> contactNumberValue))
       status(result) shouldBe Status.SEE_OTHER
     }
+    "return redirect Summary" in {
+      val result: Future[Result] = controller.SubmitInputContactNumber(isUpdate=true).apply(fakeRequestPOST.withFormUrlEncodedBody(
+        UserClientProperties.contactNumber -> contactNumberValue))
+      status(result) shouldBe Status.SEE_OTHER
+    }
     "return 303" in {
-      val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestPOST.withFormUrlEncodedBody(
+      val result: Future[Result] = controller.SubmitInputContactNumber(isUpdate=false).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.contactNumber -> contactNumberValue))
       status(result) shouldBe Status.SEE_OTHER
     }
     "redirect with session" in {
-      val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestPOST.withFormUrlEncodedBody(
+      val result: Future[Result] = controller.SubmitInputContactNumber(isUpdate=false).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.contactNumber -> contactNumberValue))
       session(result).get(SessionKeys.contactNumber).getOrElse("") shouldBe contactNumberValue
     }
     "return Bad Request" in {
-      val result: Future[Result] = controller.SubmitInputContactNumber(fakeRequestPOST.withFormUrlEncodedBody(
+      val result: Future[Result] = controller.SubmitInputContactNumber(isUpdate=false).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.contactNumber -> ""))
       status(result) shouldBe Status.BAD_REQUEST
     }

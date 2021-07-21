@@ -30,26 +30,26 @@ class PasswordController @Inject()(
                                   )
   extends FrontendController(mcc) {
 
-  def InputPassword: Action[AnyContent] = Action { implicit request =>
+  def InputPassword(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
     if (request.session.get(SessionKeys.crn).isDefined) {
       Redirect(routes.RegistrationController.home())
     } else {
-      Ok(passwordInputPage(UserPasswordForm.submitForm.fill(UserPassword("", ""))))
+      Ok(passwordInputPage(UserPasswordForm.submitForm.fill(UserPassword("", "")),isUpdate))
     }
   }
 
-  def SubmitInputPassword: Action[AnyContent] = Action { implicit request =>
+  def SubmitInputPassword(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
     if (request.session.get(SessionKeys.crn).isDefined) {
       Redirect(routes.RegistrationController.home())
     } else {
       UserPasswordForm.submitForm.bindFromRequest().fold({ formWithErrors =>
-        BadRequest(passwordInputPage(formWithErrors))
+        BadRequest(passwordInputPage(formWithErrors,isUpdate))
       }, { formData =>
         formData.password match {
-          case formData.passwordCheck => Redirect(routes.SummaryController.Summary())
+          case formData.passwordCheck => Redirect(routes.SummaryController.Summary(isUpdate))
             .withSession(request.session + (SessionKeys.password -> formData.password))
           case _ => BadRequest(passwordInputPage(UserPasswordForm.submitForm.fill(UserPassword("", ""))
-            .withError(UserClientProperties.passwordCheck, ErrorMessages.passwordMatch)))
+            .withError(UserClientProperties.passwordCheck, ErrorMessages.passwordMatch),isUpdate))
         }
       })
     }
