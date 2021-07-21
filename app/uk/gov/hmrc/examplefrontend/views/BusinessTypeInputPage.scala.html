@@ -2,10 +2,10 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.examplefrontend.model.{UserBusinessType, UserBusinessTypeForm}
 @this(layout: Layout,govukInput: GovukInput, govukErrorSummary: GovukErrorSummary)
-@(form: Form[UserBusinessType])(implicit request: Request[_], messages: Messages)
+@(form: Form[UserBusinessType],isUpdate:Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Select Business Type")) {
-<a href="@uk.gov.hmrc.examplefrontend.controllers.routes.PropertyController.InputProperty" class="govuk-back-link">Back</a>
+<a href="@uk.gov.hmrc.examplefrontend.controllers.routes.PropertyController.InputProperty(isUpdate)" class="govuk-back-link">Back</a>
 
 <h1 class="govuk-heading-xl" id="Name Value">Please select your business type:</h1>
 @if(form.errors.nonEmpty){
@@ -18,7 +18,7 @@
     }
 }
 
-@helper.form(action = uk.gov.hmrc.examplefrontend.controllers.routes.BusinessTypeController.SubmitInputBusinessType,'class -> "govuk-body"){
+@helper.form(action = uk.gov.hmrc.examplefrontend.controllers.routes.BusinessTypeController.SubmitInputBusinessType(isUpdate),'class -> "govuk-body"){
 <div class="govuk-form-group">
     <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">

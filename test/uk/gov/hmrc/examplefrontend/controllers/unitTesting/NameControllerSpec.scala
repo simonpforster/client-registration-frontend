@@ -51,19 +51,19 @@ class NameControllerSpec extends AbstractTest {
 
   "NameInput GET " should {
     "return 200" in {
-      val result: Future[Result] = controller.InputName(fakeRequestGET)
+      val result: Future[Result] = controller.InputName(isUpdate=false).apply(fakeRequestGET)
       status(result) shouldBe Status.OK
     }
     "return html" in {
-      val result: Future[Result] = controller.InputName(fakeRequestGET)
+      val result: Future[Result] = controller.InputName(isUpdate=false).apply(fakeRequestGET)
       contentType(result) shouldBe Some("text/html")
     }
     "return redirect home" in {
-      val result: Future[Result] = controller.InputName(fakeRequestGET.withSession(SessionKeys.crn -> crnTest))
+      val result: Future[Result] = controller.InputName(isUpdate=false).apply(fakeRequestGET.withSession(SessionKeys.crn -> crnTest))
       status(result) shouldBe Status.SEE_OTHER
     }
     "pre populate the form with session" in {
-      val result: Future[Result] = controller.InputName(
+      val result: Future[Result] = controller.InputName(isUpdate=false).apply(
         fakeRequestGET.withSession(SessionKeys.name -> nameValue))
 
       val doc: Document = Jsoup.parse(contentAsString(result))
@@ -73,22 +73,32 @@ class NameControllerSpec extends AbstractTest {
 
   "SubmitNameInput POST " should {
     "return redirect home" in {
-      val result: Future[Result] = controller.SubmitInputName(fakeRequestPost.withSession(
+      val result: Future[Result] = controller.SubmitInputName(isUpdate=false).apply(fakeRequestPost.withSession(
         SessionKeys.crn -> crnTest, SessionKeys.name -> nameValue))
       status(result) shouldBe Status.SEE_OTHER
     }
+    "return redirect Summary" in {
+      val result: Future[Result] = controller.SubmitInputName(isUpdate=true).apply(fakeRequestPost.withFormUrlEncodedBody(
+        UserClientProperties.name -> nameValue))
+      status(result) shouldBe Status.SEE_OTHER
+    }
+    "return form with errors if nothings inputted in form for update" in {
+      val result: Future[Result] = controller.SubmitInputName(isUpdate=true).apply(fakeRequestPost.withFormUrlEncodedBody(
+        UserClientProperties.name -> ""))
+      status(result) shouldBe Status.BAD_REQUEST
+    }
     "return 303" in {
-      val result: Future[Result] = controller.SubmitInputName(fakeRequestPost.withFormUrlEncodedBody(
+      val result: Future[Result] = controller.SubmitInputName(isUpdate=false).apply(fakeRequestPost.withFormUrlEncodedBody(
         UserClientProperties.name -> nameValue))
       status(result) shouldBe Status.SEE_OTHER
     }
     "redirect with session" in {
-      val result: Future[Result] = controller.SubmitInputName(fakeRequestPost.withFormUrlEncodedBody(
+      val result: Future[Result] = controller.SubmitInputName(isUpdate=false).apply(fakeRequestPost.withFormUrlEncodedBody(
         UserClientProperties.name -> nameValue))
       session(result).get(SessionKeys.name).get shouldBe nameValue
     }
     "return Bad Request" in {
-      val result: Future[Result] = controller.SubmitInputName(fakeRequestPost.withFormUrlEncodedBody(
+      val result: Future[Result] = controller.SubmitInputName(isUpdate=false).apply(fakeRequestPost.withFormUrlEncodedBody(
         UserClientProperties.name -> ""))
       status(result) shouldBe Status.BAD_REQUEST
     }

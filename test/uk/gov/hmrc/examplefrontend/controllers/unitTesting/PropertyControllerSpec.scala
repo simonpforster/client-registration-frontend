@@ -54,20 +54,20 @@ class PropertyControllerSpec extends AbstractTest {
 
   "InputProperty GET" should {
     "return 200" in {
-      val result: Future[Result] = controller.InputProperty(fakeRequestGET)
+      val result: Future[Result] = controller.InputProperty(isUpdate=false).apply(fakeRequestGET)
       status(result) shouldBe Status.OK
     }
     "return html" in {
-      val result: Future[Result] = controller.InputProperty(fakeRequestGET)
+      val result: Future[Result] = controller.InputProperty(isUpdate=false).apply(fakeRequestGET)
       contentType(result) shouldBe Some(htmlContentType)
     }
     "return redirect home" in {
-      val result: Future[Result] = controller.InputProperty(
+      val result: Future[Result] = controller.InputProperty(isUpdate=false).apply(
         fakeRequestGET.withSession(SessionKeys.crn -> crnTest))
       status(result) shouldBe Status.SEE_OTHER
     }
     "pre populate the form with session" in {
-      val result: Future[Result] = controller.InputProperty(fakeRequestGET.withSession(
+      val result: Future[Result] = controller.InputProperty(isUpdate=false).apply(fakeRequestGET.withSession(
         SessionKeys.property -> UserProperty(propertyNumberValue, postcodeValue).encode()))
       val doc: Document = Jsoup.parse(contentAsString(result))
       doc.getElementById("property-number").`val` shouldBe propertyNumberValue
@@ -77,25 +77,31 @@ class PropertyControllerSpec extends AbstractTest {
 
   "SubmitInputProperty POST" should {
     "return redirect home" in {
-      val result: Future[Result] = controller.SubmitInputProperty(fakeRequestPOST.withSession(
+      val result: Future[Result] = controller.SubmitInputProperty(isUpdate=false).apply(fakeRequestPOST.withSession(
         SessionKeys.crn -> crnTest,
         SessionKeys.property -> UserProperty(propertyNumberValue, postcodeValue).encode()))
       status(result) shouldBe Status.SEE_OTHER
     }
+    "return redirect Summary" in {
+      val result: Future[Result] = controller.SubmitInputProperty(isUpdate=true).apply(fakeRequestPOST.withFormUrlEncodedBody(
+        UserClientProperties.propertyNumber -> propertyNumberValue,
+        UserClientProperties.postcode -> postcodeValue))
+      status(result) shouldBe Status.SEE_OTHER
+    }
     "return 303" in {
-      val result = controller.SubmitInputProperty(fakeRequestPOST.withFormUrlEncodedBody(
+      val result = controller.SubmitInputProperty(isUpdate=false).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.propertyNumber -> propertyNumberValue,
         UserClientProperties.postcode -> postcodeValue))
       status(result) shouldBe Status.SEE_OTHER
     }
     "redirect with session" in {
-      val result = controller.SubmitInputProperty(fakeRequestPOST.withFormUrlEncodedBody(
+      val result = controller.SubmitInputProperty(isUpdate=false).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.propertyNumber -> propertyNumberValue,
         UserClientProperties.postcode -> postcodeValue))
       session(result).get(SessionKeys.property).get shouldBe UserProperty(propertyNumberValue, postcodeValue).encode()
     }
     "return Bad Request" in {
-      val result: Future[Result] = controller.SubmitInputProperty(fakeRequestPOST.withFormUrlEncodedBody(
+      val result: Future[Result] = controller.SubmitInputProperty(isUpdate=false).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.propertyNumber -> "",
         UserClientProperties.postcode -> ""))
       status(result) shouldBe Status.BAD_REQUEST

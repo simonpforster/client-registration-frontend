@@ -31,25 +31,30 @@ class ContactNumberController @Inject()(
                                        )
   extends FrontendController(mcc) {
 
-  def InputContactNumber: Action[AnyContent] = Action { implicit request =>
+  def InputContactNumber(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
     if (request.session.get(SessionKeys.crn).isDefined) {
       Redirect(routes.RegistrationController.home())
     } else {
       val form: Form[UserContactNumber] = request.session.get(SessionKeys.contactNumber).fold(UserContactNumberForm.submitForm.fill(UserContactNumber(""))) {
         contactNumber => UserContactNumberForm.submitForm.fill(UserContactNumber(contactNumber))
       }
-      Ok(contactNumberInputPage(form))
+      Ok(contactNumberInputPage(form,isUpdate))
     }
   }
 
-  def SubmitInputContactNumber: Action[AnyContent] = Action { implicit request =>
+  def SubmitInputContactNumber(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
     if (request.session.get(SessionKeys.crn).isDefined) {
       Redirect(routes.RegistrationController.home())
     } else {
+
       UserContactNumberForm.submitForm.bindFromRequest().fold({ formWithErrors =>
-        BadRequest(contactNumberInputPage(formWithErrors))
+        BadRequest(contactNumberInputPage(formWithErrors,isUpdate))
       }, { formData =>
-        Redirect(routes.PropertyController.InputProperty()).withSession(request.session + (SessionKeys.contactNumber -> formData.contact))
+        if(isUpdate){Redirect(routes.SummaryController.Summary(isUpdate)).withSession(request.session + (SessionKeys.contactNumber -> formData.contact))
+        }
+        else {
+          Redirect(routes.PropertyController.InputProperty(isUpdate = false)).withSession(request.session + (SessionKeys.contactNumber -> formData.contact))
+        }
       })
     }
   }

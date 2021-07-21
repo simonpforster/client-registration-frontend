@@ -30,27 +30,28 @@ class BusinessTypeController @Inject()(
                                       )
   extends FrontendController(mcc) {
 
-  def InputBusinessType: Action[AnyContent] = Action { implicit request =>
+  def InputBusinessType(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
     if (request.session.get(SessionKeys.crn).isDefined) {
       Redirect(routes.RegistrationController.home())
     } else {
-      Ok(businessTypeInputPage(UserBusinessTypeForm.submitForm.fill(UserBusinessType(""))))
+      Ok(businessTypeInputPage(UserBusinessTypeForm.submitForm.fill(UserBusinessType("")),isUpdate))
     }
   }
 
-  def SubmitInputBusinessType: Action[AnyContent] = Action { implicit request =>
+  def SubmitInputBusinessType(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
     if (request.session.get(SessionKeys.crn).isDefined) {
       Redirect(routes.RegistrationController.home())
     } else {
       UserBusinessTypeForm.submitForm.bindFromRequest().fold({ _ =>
         val form = UserBusinessTypeForm.submitForm.fill(UserBusinessType(""))
           .withError(UserClientProperties.businessType, ErrorMessages.businessTypeFormError)
-        BadRequest(businessTypeInputPage(form))
-      }, { formData =>
-        Redirect(routes.PasswordController.InputPassword())
-          .withSession(request.session + (SessionKeys.businessType -> formData.businessType))
-      })
+        BadRequest(businessTypeInputPage(form,isUpdate))
+      },formData => if(isUpdate){
+          Redirect(routes.SummaryController.Summary(isUpdate)).withSession(request.session + (SessionKeys.businessType -> formData.businessType))
+      }else {
+          Redirect(routes.PasswordController.InputPassword(isUpdate))
+            .withSession(request.session + (SessionKeys.businessType -> formData.businessType))
+        })
     }
   }
-
 }

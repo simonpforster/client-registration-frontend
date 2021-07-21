@@ -50,15 +50,15 @@ class BusinessTypeControllerSpec extends AbstractTest {
 
   "InputBusinessType GET" should {
     "return 200" in {
-      val result: Future[Result] = controller.InputBusinessType(fakeRequestGET)
+      val result: Future[Result] = controller.InputBusinessType(isUpdate=false).apply(fakeRequestGET)
       status(result) shouldBe Status.OK
     }
     "return html" in {
-      val result: Future[Result] = controller.InputBusinessType(fakeRequestGET)
+      val result: Future[Result] = controller.InputBusinessType(isUpdate=false).apply(fakeRequestGET)
       contentType(result) shouldBe Some(htmlContentType)
     }
     "return redirect home" in {
-      val result: Future[Result] = controller.InputBusinessType(
+      val result: Future[Result] = controller.InputBusinessType(isUpdate=false).apply(
         fakeRequestGET.withSession(SessionKeys.crn -> crnTest)
       )
       status(result) shouldBe Status.SEE_OTHER
@@ -67,23 +67,28 @@ class BusinessTypeControllerSpec extends AbstractTest {
 
   "SubmitInputBusinessType POST" should {
     "return redirect home" in {
-      val result: Future[Result] = controller.SubmitInputBusinessType(fakeRequestPOST.withSession(
+      val result: Future[Result] = controller.SubmitInputBusinessType(isUpdate=false).apply(fakeRequestPOST.withSession(
         SessionKeys.crn -> crnTest,
         SessionKeys.businessType -> businessTypeValue))
       status(result) shouldBe Status.SEE_OTHER
     }
+    "return redirect Summary" in {
+      val result: Future[Result] = controller.SubmitInputBusinessType(isUpdate=true).apply(fakeRequestPOST.withFormUrlEncodedBody(
+        UserClientProperties.businessType -> businessTypeValue))
+      status(result) shouldBe Status.SEE_OTHER
+    }
     "return 303" in {
-      val result = controller.SubmitInputBusinessType(fakeRequestPOST.withFormUrlEncodedBody(
+      val result = controller.SubmitInputBusinessType(isUpdate=false).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.businessType -> businessTypeValue))
       status(result) shouldBe Status.SEE_OTHER
     }
     "redirect with session" in {
-      val result = controller.SubmitInputBusinessType(fakeRequestPOST.withFormUrlEncodedBody(
+      val result = controller.SubmitInputBusinessType(isUpdate=false).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.businessType -> businessTypeValue))
       session(result).get(SessionKeys.businessType).getOrElse("") shouldBe businessTypeValue
     }
     "return Bad Request" in {
-      val result: Future[Result] = controller.SubmitInputBusinessType(fakeRequestPOST.withFormUrlEncodedBody(
+      val result: Future[Result] = controller.SubmitInputBusinessType(isUpdate=false).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.businessType -> ""))
       status(result) shouldBe Status.BAD_REQUEST
     }

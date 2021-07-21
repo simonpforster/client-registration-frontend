@@ -31,26 +31,34 @@ class NameController @Inject()(
                               )
   extends FrontendController(mcc) {
 
-  def InputName: Action[AnyContent] = Action { implicit request =>
+  def InputName(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
     if (request.session.get(SessionKeys.crn).isDefined) {
       Redirect(routes.RegistrationController.home())
     } else {
       val form: Form[UserName] = request.session.get(SessionKeys.name).fold(UserNameForm.submitForm.fill(UserName(""))) { name =>
         UserNameForm.submitForm.fill(UserName(name))
       }
-      Ok(nameInputPage(form))
+      Ok(nameInputPage(form,isUpdate))
     }
   }
 
-  def SubmitInputName: Action[AnyContent] = Action { implicit request =>
+  def SubmitInputName(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
     if (request.session.get(SessionKeys.crn).isDefined) {
       Redirect(routes.RegistrationController.home())
     } else {
-      UserNameForm.submitForm.bindFromRequest().fold({ formWithErrors =>
-        BadRequest(nameInputPage(formWithErrors))
-      }, { formData =>
-        Redirect(routes.BusinessNameController.InputBusinessName()).withSession(request.session + (SessionKeys.name -> formData.name))
-      })
+      if (isUpdate) {
+        UserNameForm.submitForm.bindFromRequest().fold({ formWithErrors =>
+          BadRequest(nameInputPage(formWithErrors, isUpdate))
+        }, { formData =>
+        Redirect(routes.SummaryController.Summary(isUpdate)).withSession(request.session + (SessionKeys.name -> formData.name))
+        })
+      } else {
+        UserNameForm.submitForm.bindFromRequest().fold({ formWithErrors =>
+          BadRequest(nameInputPage(formWithErrors, isUpdate))
+        }, { formData =>
+          Redirect(routes.BusinessNameController.InputBusinessName(isUpdate)).withSession(request.session + (SessionKeys.name -> formData.name))
+        })
+      }
     }
   }
 

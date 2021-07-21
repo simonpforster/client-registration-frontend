@@ -31,26 +31,34 @@ class BusinessNameController @Inject()(
                                       )
   extends FrontendController(mcc) {
 
-  def InputBusinessName: Action[AnyContent] = Action { implicit request =>
+  def InputBusinessName(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
     if (request.session.get(SessionKeys.crn).isDefined) {
       Redirect(routes.RegistrationController.home())
     } else {
       val form: Form[UserBusinessName] = request.session.get(SessionKeys.businessName).fold(UserBusinessNameForm.submitForm.fill(UserBusinessName(""))) {
         business => UserBusinessNameForm.submitForm.fill(UserBusinessName(business))
       }
-      Ok(businessNameInputPage(form))
+      Ok(businessNameInputPage(form,isUpdate))
     }
   }
 
-  def SubmitInputBusinessName: Action[AnyContent] = Action { implicit request =>
+  def SubmitInputBusinessName(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
     if (request.session.get(SessionKeys.crn).isDefined) {
       Redirect(routes.RegistrationController.home())
     } else {
-      UserBusinessNameForm.submitForm.bindFromRequest().fold({ formWithErrors =>
-        BadRequest(businessNameInputPage(formWithErrors))
-      }, { formData =>
-        Redirect(routes.ContactNumberController.InputContactNumber()).withSession(request.session + (SessionKeys.businessName -> formData.business))
-      })
+      if(isUpdate){
+        UserBusinessNameForm.submitForm.bindFromRequest().fold({ formWithErrors =>
+          BadRequest(businessNameInputPage(formWithErrors,isUpdate))
+        }, { formData =>
+          Redirect(routes.SummaryController.Summary(isUpdate)).withSession(request.session + (SessionKeys.businessName -> formData.business))
+        })
+      }else {
+        UserBusinessNameForm.submitForm.bindFromRequest().fold({ formWithErrors =>
+          BadRequest(businessNameInputPage(formWithErrors,isUpdate))
+        }, { formData =>
+          Redirect(routes.ContactNumberController.InputContactNumber(isUpdate=false)).withSession(request.session + (SessionKeys.businessName -> formData.business))
+        })
+      }
     }
   }
 
