@@ -31,7 +31,7 @@ class RegistrationController @Inject()(
   extends FrontendController(mcc) with I18nSupport {
 
   def home: Action[AnyContent] = Action { implicit request =>
-    Redirect(UrlKeys.clientDashboardHome)
+    Redirect(UrlKeys.clientDashboardHome).withNewSession
   }
 
   def dashboard: Action[AnyContent] = Action { implicit request =>
