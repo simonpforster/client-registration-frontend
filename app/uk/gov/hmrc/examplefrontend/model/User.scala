@@ -110,7 +110,7 @@ object UserPasswordForm {
     Form(
       mapping(
         UserClientProperties.password -> Forms.text.verifying(ErrorMessages.passwordFormError, _.length >= 10),
-        UserClientProperties.passwordCheck -> Forms.text.verifying(ErrorMessages.passwordCheckFormError, _.length >= 10)
+        UserClientProperties.passwordCheck -> Forms.text
       )(UserPassword.apply)(UserPassword.unapply)
     )
 }
