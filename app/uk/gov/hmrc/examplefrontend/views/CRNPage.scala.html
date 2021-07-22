@@ -6,9 +6,10 @@
 @layout(pageTitle = Some("Application Complete")) {
 
 
-<h1 class="govuk-heading-xl">Account successfully created</h1>
+
 <div class="govuk-width-container">
     <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
+        <h1 class="govuk-heading-xl">Account successfully created</h1>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <div class="govuk-panel govuk-panel--confirmation">
@@ -19,8 +20,19 @@
                         Your reference number<br><strong id="crn">@result.crn</strong>
                     </div>
                 </div>
-                <p class="govuk-body">We have sent you a confirmation email.</p>
-                <p class="govuk-body">Please Remember this Number as it will be used for authentication.</p>
+                <p class="govuk-body">Please remember this reference number as it will be used for authentication.</p>
+
+                <h2 class="govuk-heading-m">What happens next</h2>
+                <p class="govuk-body">
+                    We’ve sent your application to Hackney Electoral Register Office.
+                </p>
+                <p class="govuk-body">
+                    They will contact you either to confirm your registration, or to ask for more information.
+                </p>
+
+                <p class="govuk-body">
+                    <a href="#" class="govuk-link">What did you think of this service?</a> (takes 30 seconds)
+                </p>
             </div>
         </div>
     </main>
@@ -29,7 +41,7 @@
 <div class="govuk-button-group">
     <a class="govuk-button" id="submit" data-module="govuk-button"
        href="@uk.gov.hmrc.examplefrontend.controllers.routes.RegistrationController.dashboard">
-        Continue
+        Continue to dashboard
     </a>
 </div>
 }
