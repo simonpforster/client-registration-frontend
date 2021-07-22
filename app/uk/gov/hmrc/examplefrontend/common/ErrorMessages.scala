@@ -25,7 +25,7 @@ object ErrorMessages {
   val businessNameFormError: String = "Business name must not be empty"
   val contactNumberFormError: String = "Phone number must be 10 or more digits"
   val propertyNumberFormError: String = "Property number must not be empty"
-  val postcodeFormError: String = "Postcode must not be empty"
+  val postcodeFormError: String = "Postcode must be valid"
   val businessTypeFormError: String = "Please select one field"
   val passwordFormError: String = "Password field must not be empty"
   val passwordCheckFormError: String = "Password Match field must not be empty"

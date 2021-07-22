@@ -16,9 +16,13 @@
 
 package uk.gov.hmrc.examplefrontend.model
 
+import org.xmlunit.validation.ValidationResult
 import play.api.data.Forms.mapping
+import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 import play.api.data.{Form, Forms}
 import uk.gov.hmrc.examplefrontend.common.{ErrorMessages, UserClientProperties}
+
+import scala.util.matching.Regex
 
 
 case class UserName(name: String)
@@ -55,6 +59,7 @@ object UserContactNumberForm {
 }
 
 case class UserProperty(propertyNumber: String, postcode: String) {
+
   def encode(): String = {
     propertyNumber + "/" + postcode
   }
@@ -70,11 +75,19 @@ object UserProperty {
 }
 
 object UserPropertyForm {
+
+  val regEx: Regex = """(?:[A-Za-z]\d ?\d[A-Za-z]{2})|(?:[A-Za-z][A-Za-z\d]\d ?\d[A-Za-z]{2})|(?:[A-Za-z]{2}\d{2} ?\d[A-Za-z]{2})|(?:[A-Za-z]\d[A-Za-z] ?\d[A-Za-z]{2})|(?:[A-Za-z]{2}\d[A-Za-z] ?\d[A-Za-z]{2})""".stripMargin.r
+
+  val postcodeCheckConstraint: Constraint[String] = Constraint("postcodeRegex")({
+    case regEx() => Valid
+    case _ => Invalid(ErrorMessages.postcodeFormError)
+  })
+
   val submitForm: Form[UserProperty] =
     Form(
       mapping(
         UserClientProperties.propertyNumber -> Forms.text.verifying(ErrorMessages.propertyNumberFormError, _.nonEmpty),
-        UserClientProperties.postcode -> Forms.text.verifying(ErrorMessages.postcodeFormError, _.isEmpty == false)
+        UserClientProperties.postcode -> Forms.text.verifying(postcodeCheckConstraint)
       )(UserProperty.apply)(UserProperty.unapply)
     )
 }
