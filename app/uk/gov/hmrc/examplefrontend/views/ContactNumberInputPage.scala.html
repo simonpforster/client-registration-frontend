@@ -24,6 +24,10 @@
     @govukInput(Input(id = "contact-number" ,inputType = "number", name = "contactNumber", value = Some(form.data("contactNumber")), hint = Some(Hint(content = Text("The phone number you prefer to be contacted on, for example - '01615555555'"))), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("Contact Number"))))
 }
 <button class="govuk-button" id="submit" data-module="govuk-button" type="submit">Continue</button>
+@if(isUpdate) {
+    <hr>
+    <a href="@uk.gov.hmrc.examplefrontend.controllers.routes.SummaryController.Summary(isUpdate)" class="govuk-link cancel">Cancel</a>
+}
 }
 
 

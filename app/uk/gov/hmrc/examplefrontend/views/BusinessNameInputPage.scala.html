@@ -23,6 +23,11 @@ ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, 
     @govukInput(Input(id = "business-name", name = "businessName", value = Some(form.data("businessName")), hint = Some(Hint(content = Text("Enter the name of your business, this cannot be changed once submitted at the end, for example - 'McDonalds'"))), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("Business Name"))))
 }
 <button class="govuk-button" id="submit" data-module="govuk-button" type="submit">Continue</button>
+
+@if(isUpdate) {
+    <hr>
+    <a href="@uk.gov.hmrc.examplefrontend.controllers.routes.SummaryController.Summary(isUpdate)" class="govuk-link cancel">Cancel</a>
+}
 }
 
 
