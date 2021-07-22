@@ -19,9 +19,9 @@
 }
 @helper.form(action = uk.gov.hmrc.examplefrontend.controllers.routes.NameController.SubmitInputName(isUpdate),'class -> "govuk-body"){
 @if(form.errors("name").nonEmpty){
-    @govukInput(Input(id = "name", name = "name", value = Some(form.data("name")), label = Label(content = Text("Full name:")), hint = Some(Hint(content = Text("Enter your full name, for example - 'John Smith'"))), errorMessage = Some(ErrorMessage(content = Text("Please provide your First Name and Last Name")))))
+    @govukInput(Input(id = "name", name = "name", value = Some(form.data("name")), label = Label(content = Text("Full name")), hint = Some(Hint(content = Text("Enter your full name, for example - 'John Smith'"))), errorMessage = Some(ErrorMessage(content = Text("Please provide your First Name and Last Name")))))
 }else{
-    @govukInput(Input(id = "name", name = "name", value = Some(form.data("name")), hint = Some(Hint(content = Text("Enter your full name, for example - 'John Smith'"))), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("Full name:"))))
+    @govukInput(Input(id = "name", name = "name", value = Some(form.data("name")), hint = Some(Hint(content = Text("Enter your full name, for example - 'John Smith'"))), label = Label(isPageHeading = true, classes = "govuk-label--l, name, govuk-input-error", content = Text("Full name"))))
 }
 <button class="govuk-button" id="submit" data-module="govuk-button" type="submit">Next</button>
 }
