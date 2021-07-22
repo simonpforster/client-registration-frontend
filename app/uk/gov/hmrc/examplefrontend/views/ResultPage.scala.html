@@ -7,7 +7,7 @@
 <a href="@uk.gov.hmrc.examplefrontend.controllers.routes.PasswordController.InputPassword(isUpdate)" class="govuk-back-link">Back</a>
 <h1 class="govuk-heading-xl">User Info</h1>
 <div id="with-hint-hint" class="govuk-hint">
-    Below are the details you entered. If these are correct press submit to continue or back to alter details.
+    Below are the details you have entered. If these are correct press submit to continue to complete the process or you can alter details below.<br>
     Please ensure these are correct, as some details cannot be changed after submission.
 </div>
 <form action="example/NameInput">
@@ -15,21 +15,21 @@
 
         <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">
-                Name:
+                Name
             </dt>
             <dd class="govuk-summary-list__value" id="name-value">
                 @result.name
             </dd>
             <dd class="govuk-summary-list__actions">
                 <a class="govuk-link" href="@uk.gov.hmrc.examplefrontend.controllers.routes.NameController.InputName(isUpdate = true)">
-                    Change<span class="govuk-visually-hidden">Property Details</span>
+                    Change<span class="govuk-visually-hidden">Name</span>
                 </a>
             </dd>
         </div>
 
         <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">
-                Business Name:
+                Business Name
             </dt>
             <dd class="govuk-summary-list__value" id="business-name-value">
                 @result.businessName
@@ -37,14 +37,14 @@
             <dd class="govuk-summary-list__actions">
                 <a class="govuk-link" href="@uk.gov.hmrc.examplefrontend.controllers.routes.BusinessNameController.InputBusinessName(isUpdate = true)">
 
-                    Change<span class="govuk-visually-hidden">Property Details</span>
+                    Change<span class="govuk-visually-hidden">Business Name</span>
                 </a>
             </dd>
         </div>
 
         <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">
-                Contact Number:
+                Contact Number
             </dt>
             <dd class="govuk-summary-list__value" id="contact-value">
                 @result.contactNumber
@@ -52,7 +52,7 @@
             <dd class="govuk-summary-list__actions">
                 <a class="govuk-link" href="@uk.gov.hmrc.examplefrontend.controllers.routes.ContactNumberController.InputContactNumber(isUpdate = true)">
 
-                    Change<span class="govuk-visually-hidden">Property Details</span>
+                    Change<span class="govuk-visually-hidden">Contact Number</span>
                 </a>
             </dd>
         </div>
@@ -82,7 +82,7 @@
             <dd class="govuk-summary-list__actions">
                 <a class="govuk-link" href="@uk.gov.hmrc.examplefrontend.controllers.routes.BusinessTypeController.InputBusinessType(isUpdate = true)">
 
-                    Change<span class="govuk-visually-hidden">Property Details</span>
+                    Change<span class="govuk-visually-hidden">Business Type</span>
                 </a>
             </dd>
         </div>
