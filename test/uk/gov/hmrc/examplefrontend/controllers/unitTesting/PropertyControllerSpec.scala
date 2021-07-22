@@ -48,7 +48,7 @@ class PropertyControllerSpec extends AbstractTest {
   )
 
   private val propertyNumberValue: String = "TestPropertyNumber"
-  private val postcodeValue: String = "TestAddress"
+  private val postcodeValue: String = "HA8 7EY"
   private val crnTest: String = "CRN00000001"
   private val htmlContentType: String = "text/html"
 
