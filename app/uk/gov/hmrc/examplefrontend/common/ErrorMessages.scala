@@ -23,7 +23,7 @@ object ErrorMessages {
 
   val nameFormError: String = "Name must not be empty"
   val businessNameFormError: String = "Business name must not be empty"
-  val contactNumberFormError: String = "Phone number must be 10 or more digits"
+  val contactNumberFormError: String = "Phone number must be 10 or 11 digits"
   val propertyNumberFormError: String = "Property number must not be empty"
   val postcodeFormError: String = "Postcode must be valid"
   val businessTypeFormError: String = "Please select one field"

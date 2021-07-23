@@ -46,7 +46,6 @@ class ContactNumberController @Inject()(
     if (request.session.get(SessionKeys.crn).isDefined) {
       Redirect(routes.RegistrationController.home())
     } else {
-
       UserContactNumberForm.submitForm.bindFromRequest().fold({ formWithErrors =>
         BadRequest(contactNumberInputPage(formWithErrors,isUpdate))
       }, { formData =>
