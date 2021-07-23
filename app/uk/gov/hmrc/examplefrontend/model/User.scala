@@ -16,9 +16,8 @@
 
 package uk.gov.hmrc.examplefrontend.model
 
-import org.xmlunit.validation.ValidationResult
 import play.api.data.Forms.mapping
-import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
+import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.data.{Form, Forms}
 import uk.gov.hmrc.examplefrontend.common.{ErrorMessages, UserClientProperties}
 
@@ -28,8 +27,6 @@ import scala.util.matching.Regex
 case class UserName(name: String)
 
 object UserNameForm {
-
-  val validNumber: Regex = """[1-9][0-9]{9,14}""".r
 
   val submitForm: Form[UserName] =
     Form(
