@@ -58,6 +58,10 @@
     </div>
 </div>
 <button class="govuk-button" id="submit" data-module="govuk-button" type="submit">Continue</button>
+@if(isUpdate) {
+    <hr>
+    <a href="@uk.gov.hmrc.examplefrontend.controllers.routes.SummaryController.Summary(isUpdate)" class="govuk-link cancel">Cancel</a>
+}
 }
 }
 

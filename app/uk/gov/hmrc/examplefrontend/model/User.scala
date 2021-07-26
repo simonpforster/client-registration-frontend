@@ -27,6 +27,7 @@ import scala.util.matching.Regex
 case class UserName(name: String)
 
 object UserNameForm {
+
   val submitForm: Form[UserName] =
     Form(
       mapping(
@@ -49,10 +50,18 @@ object UserBusinessNameForm {
 case class UserContactNumber(contact: String)
 
 object UserContactNumberForm {
+
+  val regEx: Regex = """^[0-9]{10}$|^[0-9]{11}$""".r
+
+  val contactNumberCheckConstraint: Constraint[String] = Constraint("contactNumberRegex")({
+    case regEx() => Valid
+    case _ => Invalid(ErrorMessages.contactNumberFormError)
+  })
+
   val submitForm: Form[UserContactNumber] =
     Form(
       mapping(
-        UserClientProperties.contactNumber -> Forms.text.verifying(ErrorMessages.contactNumberFormError, _.length >= 10)
+        UserClientProperties.contactNumber -> Forms.text.verifying(contactNumberCheckConstraint)
       )(UserContactNumber.apply)(UserContactNumber.unapply)
     )
 }
