@@ -19,6 +19,7 @@ package uk.gov.hmrc.examplefrontend.controllers
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.examplefrontend.common.SessionKeys
+import uk.gov.hmrc.examplefrontend.common.Utils.loggedInCheck
 import uk.gov.hmrc.examplefrontend.model.{UserContactNumber, UserContactNumberForm}
 import uk.gov.hmrc.examplefrontend.views.html.ContactNumberInputPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -32,9 +33,7 @@ class ContactNumberController @Inject()(
   extends FrontendController(mcc) {
 
   def InputContactNumber(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
-    if (request.session.get(SessionKeys.crn).isDefined) {
-      Redirect(routes.RegistrationController.home())
-    } else {
+    loggedInCheck{ () =>
       val form: Form[UserContactNumber] = request.session.get(SessionKeys.contactNumber).fold(UserContactNumberForm.submitForm.fill(UserContactNumber(""))) {
         contactNumber => UserContactNumberForm.submitForm.fill(UserContactNumber(contactNumber))
       }
@@ -43,10 +42,7 @@ class ContactNumberController @Inject()(
   }
 
   def SubmitInputContactNumber(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
-    if (request.session.get(SessionKeys.crn).isDefined) {
-      Redirect(routes.RegistrationController.home())
-    } else {
-
+    loggedInCheck{ () =>
       UserContactNumberForm.submitForm.bindFromRequest().fold({ formWithErrors =>
         BadRequest(contactNumberInputPage(formWithErrors,isUpdate))
       }, { formData =>
@@ -58,5 +54,4 @@ class ContactNumberController @Inject()(
       })
     }
   }
-
 }

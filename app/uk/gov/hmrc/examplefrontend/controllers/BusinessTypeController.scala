@@ -17,6 +17,7 @@
 package uk.gov.hmrc.examplefrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.examplefrontend.common.Utils.loggedInCheck
 import uk.gov.hmrc.examplefrontend.common.{ErrorMessages, SessionKeys, UserClientProperties}
 import uk.gov.hmrc.examplefrontend.model.{UserBusinessType, UserBusinessTypeForm}
 import uk.gov.hmrc.examplefrontend.views.html.BusinessTypeInputPage
@@ -31,27 +32,23 @@ class BusinessTypeController @Inject()(
   extends FrontendController(mcc) {
 
   def InputBusinessType(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
-    if (request.session.get(SessionKeys.crn).isDefined) {
-      Redirect(routes.RegistrationController.home())
-    } else {
+    loggedInCheck{ () =>
       Ok(businessTypeInputPage(UserBusinessTypeForm.submitForm.fill(UserBusinessType("")),isUpdate))
     }
   }
 
   def SubmitInputBusinessType(isUpdate: Boolean): Action[AnyContent] = Action { implicit request =>
-    if (request.session.get(SessionKeys.crn).isDefined) {
-      Redirect(routes.RegistrationController.home())
-    } else {
+    loggedInCheck{ () =>
       UserBusinessTypeForm.submitForm.bindFromRequest().fold({ _ =>
         val form = UserBusinessTypeForm.submitForm.fill(UserBusinessType(""))
           .withError(UserClientProperties.businessType, ErrorMessages.businessTypeFormError)
         BadRequest(businessTypeInputPage(form,isUpdate))
       },formData => if(isUpdate){
-          Redirect(routes.SummaryController.Summary(isUpdate)).withSession(request.session + (SessionKeys.businessType -> formData.businessType))
+        Redirect(routes.SummaryController.Summary(isUpdate)).withSession(request.session + (SessionKeys.businessType -> formData.businessType))
       }else {
-          Redirect(routes.PasswordController.InputPassword(isUpdate))
-            .withSession(request.session + (SessionKeys.businessType -> formData.businessType))
-        })
+        Redirect(routes.PasswordController.InputPassword(isUpdate))
+          .withSession(request.session + (SessionKeys.businessType -> formData.businessType))
+      })
     }
-  }
+    }
 }

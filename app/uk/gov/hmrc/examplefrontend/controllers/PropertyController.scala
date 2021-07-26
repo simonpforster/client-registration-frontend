@@ -19,6 +19,7 @@ package uk.gov.hmrc.examplefrontend.controllers
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.examplefrontend.common.SessionKeys
+import uk.gov.hmrc.examplefrontend.common.Utils.loggedInCheck
 import uk.gov.hmrc.examplefrontend.model.{UserProperty, UserPropertyForm}
 import uk.gov.hmrc.examplefrontend.views.html.PropertyInputPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -32,27 +33,23 @@ class PropertyController @Inject()(
   extends FrontendController(mcc) {
 
   def InputProperty(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
-    if (request.session.get(SessionKeys.crn).isDefined) {
-      Redirect(routes.RegistrationController.home())
-    } else {
+    loggedInCheck{ () =>
       val form: Form[UserProperty] = request.session.get(SessionKeys.property)
         .fold(UserPropertyForm.submitForm.fill(UserProperty("", ""))) {
-        property => UserPropertyForm.submitForm.fill(UserProperty.decode(property))
-      }
+          property => UserPropertyForm.submitForm.fill(UserProperty.decode(property))
+        }
       Ok(propertyInputPage(form,isUpdate))
     }
   }
 
   def SubmitInputProperty(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
-    if (request.session.get(SessionKeys.crn).isDefined) {
-      Redirect(routes.RegistrationController.home())
-    } else {
+    loggedInCheck{ () =>
       UserPropertyForm.submitForm.bindFromRequest().fold({ formWithErrors =>
         BadRequest(propertyInputPage(formWithErrors,isUpdate))
       },{ formData => if(isUpdate) {
         Redirect(routes.SummaryController.Summary(isUpdate)).withSession(request.session + (SessionKeys.property -> formData.encode()))
       }
-        else {
+      else {
         Redirect(routes.BusinessTypeController.InputBusinessType(isUpdate))
           .withSession(request.session + (SessionKeys.property -> formData.encode()))
       }
@@ -60,5 +57,4 @@ class PropertyController @Inject()(
       })
     }
   }
-
 }

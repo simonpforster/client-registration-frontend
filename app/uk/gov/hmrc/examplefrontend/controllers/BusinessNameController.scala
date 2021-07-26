@@ -19,6 +19,7 @@ package uk.gov.hmrc.examplefrontend.controllers
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.examplefrontend.common.SessionKeys
+import uk.gov.hmrc.examplefrontend.common.Utils.{loggedInCheck}
 import uk.gov.hmrc.examplefrontend.model.{UserBusinessName, UserBusinessNameForm}
 import uk.gov.hmrc.examplefrontend.views.html.BusinessNameInputPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -32,9 +33,7 @@ class BusinessNameController @Inject()(
   extends FrontendController(mcc) {
 
   def InputBusinessName(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
-    if (request.session.get(SessionKeys.crn).isDefined) {
-      Redirect(routes.RegistrationController.home())
-    } else {
+    loggedInCheck{ () =>
       val form: Form[UserBusinessName] = request.session.get(SessionKeys.businessName).fold(UserBusinessNameForm.submitForm.fill(UserBusinessName(""))) {
         business => UserBusinessNameForm.submitForm.fill(UserBusinessName(business))
       }
@@ -43,9 +42,7 @@ class BusinessNameController @Inject()(
   }
 
   def SubmitInputBusinessName(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
-    if (request.session.get(SessionKeys.crn).isDefined) {
-      Redirect(routes.RegistrationController.home())
-    } else {
+    loggedInCheck{ () =>
       if(isUpdate){
         UserBusinessNameForm.submitForm.bindFromRequest().fold({ formWithErrors =>
           BadRequest(businessNameInputPage(formWithErrors,isUpdate))
@@ -61,6 +58,5 @@ class BusinessNameController @Inject()(
       }
     }
   }
-
 
 }

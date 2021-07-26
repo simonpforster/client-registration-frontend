@@ -102,24 +102,9 @@ class SummaryControllerSpec extends AbstractTest {
       doc.getElementById("business-type-value").text() shouldBe user.businessType
 
     }
-    "return redirect home" in {
-      val result: Future[Result] = controller.Summary(isUpdate=false).apply(fakeRequestSummary.withSession(SessionKeys.crn -> client.crn))
-      status(result) shouldBe Status.SEE_OTHER
-    }
   }
 
   "SubmitSummary POST" should {
-    "return redirect home" in {
-      val result: Future[Result] = controller.SummarySubmit(fakeRequestSubmitSummary.withSession(
-        SessionKeys.crn -> client.crn,
-        SessionKeys.name -> user.name,
-        SessionKeys.businessName -> user.businessName,
-        SessionKeys.contactNumber -> user.contactNumber,
-        SessionKeys.businessType -> user.businessType,
-        SessionKeys.password -> user.password,
-        SessionKeys.property -> (user.propertyNumber + "/" + user.postcode)))
-      status(result) shouldBe Status.SEE_OTHER
-    }
     "return 303" in {
       when(connector.create(any())) thenReturn Future.successful(Some(client))
       val result: Future[Result] = controller.SummarySubmit(fakeRequestSubmitSummary.withSession(

@@ -19,11 +19,13 @@ package uk.gov.hmrc.examplefrontend.controllers
 import play.api.data.Form
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.examplefrontend.common.SessionKeys
+import uk.gov.hmrc.examplefrontend.common.Utils.loggedInCheck
 import uk.gov.hmrc.examplefrontend.model.{UserName, UserNameForm}
 import uk.gov.hmrc.examplefrontend.views.html.NameInputPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
+import scala.concurrent.Future
 
 class NameController @Inject()(
                                 mcc: MessagesControllerComponents,
@@ -32,25 +34,21 @@ class NameController @Inject()(
   extends FrontendController(mcc) {
 
   def InputName(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
-    if (request.session.get(SessionKeys.crn).isDefined) {
-      Redirect(routes.RegistrationController.home())
-    } else {
-      val form: Form[UserName] = request.session.get(SessionKeys.name).fold(UserNameForm.submitForm.fill(UserName(""))) { name =>
-        UserNameForm.submitForm.fill(UserName(name))
+    loggedInCheck{ () =>
+        val form: Form[UserName] = request.session.get(SessionKeys.name).fold(UserNameForm.submitForm.fill(UserName(""))) { name =>
+          UserNameForm.submitForm.fill(UserName(name))
+        }
+        Ok(nameInputPage(form,isUpdate))
       }
-      Ok(nameInputPage(form,isUpdate))
-    }
   }
 
   def SubmitInputName(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
-    if (request.session.get(SessionKeys.crn).isDefined) {
-      Redirect(routes.RegistrationController.home())
-    } else {
+    loggedInCheck { () =>
       if (isUpdate) {
         UserNameForm.submitForm.bindFromRequest().fold({ formWithErrors =>
           BadRequest(nameInputPage(formWithErrors, isUpdate))
         }, { formData =>
-        Redirect(routes.SummaryController.Summary(isUpdate)).withSession(request.session + (SessionKeys.name -> formData.name))
+          Redirect(routes.SummaryController.Summary(isUpdate)).withSession(request.session + (SessionKeys.name -> formData.name))
         })
       } else {
         UserNameForm.submitForm.bindFromRequest().fold({ formWithErrors =>
@@ -61,5 +59,4 @@ class NameController @Inject()(
       }
     }
   }
-
 }
