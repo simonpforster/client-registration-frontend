@@ -47,7 +47,6 @@ class BusinessNameControllerSpec extends AbstractTest {
   )
 
   private val businessNameValue: String = "TestNameOfBusiness"
-  private val crnTest: String = "CRN00000001"
   private val htmlContentType: String = "text/html"
 
   "BusinessNameInput GET " should {
@@ -59,11 +58,6 @@ class BusinessNameControllerSpec extends AbstractTest {
       val result: Future[Result] = controller.InputBusinessName(isUpdate=false).apply(fakeRequestGET)
       contentType(result) shouldBe Some(htmlContentType)
     }
-    "return redirect home" in {
-      val result: Future[Result] = controller.InputBusinessName(isUpdate=false).apply(
-        fakeRequestGET.withSession(SessionKeys.crn -> crnTest))
-      status(result) shouldBe Status.SEE_OTHER
-    }
     "pre populate the form with session" in {
       val result: Future[Result] = controller.InputBusinessName(isUpdate=false).apply(
         fakeRequestGET.withSession(SessionKeys.businessName -> businessNameValue))
@@ -73,12 +67,6 @@ class BusinessNameControllerSpec extends AbstractTest {
   }
 
   "SubmitBusinessNameInput POST " should {
-    "return redirect home" in {
-      val result: Future[Result] = controller.SubmitInputBusinessName(isUpdate=false).apply(fakeRequestPost.withSession(
-        SessionKeys.crn -> crnTest,
-        SessionKeys.businessName -> businessNameValue))
-      status(result) shouldBe Status.SEE_OTHER
-    }
     "return redirect Summary" in {
       val result: Future[Result] = controller.SubmitInputBusinessName(isUpdate=true).apply(fakeRequestPost.withFormUrlEncodedBody(
         UserClientProperties.businessName -> businessNameValue))

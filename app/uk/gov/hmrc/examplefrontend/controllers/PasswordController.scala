@@ -17,6 +17,7 @@
 package uk.gov.hmrc.examplefrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.examplefrontend.common.Utils.loggedInCheck
 import uk.gov.hmrc.examplefrontend.common.{ErrorMessages, SessionKeys, UserClientProperties}
 import uk.gov.hmrc.examplefrontend.model.{UserPassword, UserPasswordForm}
 import uk.gov.hmrc.examplefrontend.views.html.PasswordInputPage
@@ -31,17 +32,13 @@ class PasswordController @Inject()(
   extends FrontendController(mcc) {
 
   def InputPassword(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
-    if (request.session.get(SessionKeys.crn).isDefined) {
-      Redirect(routes.RegistrationController.home())
-    } else {
+    loggedInCheck{ () =>
       Ok(passwordInputPage(UserPasswordForm.submitForm.fill(UserPassword("", "")),isUpdate))
     }
   }
 
   def SubmitInputPassword(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
-    if (request.session.get(SessionKeys.crn).isDefined) {
-      Redirect(routes.RegistrationController.home())
-    } else {
+    loggedInCheck{ () =>
       UserPasswordForm.submitForm.bindFromRequest().fold({ formWithErrors =>
         BadRequest(passwordInputPage(formWithErrors,isUpdate))
       }, { formData =>
@@ -54,5 +51,4 @@ class PasswordController @Inject()(
       })
     }
   }
-
 }

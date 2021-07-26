@@ -45,7 +45,6 @@ class PasswordControllerSpec extends AbstractTest {
   )
 
   private val passwordValue: String = "TestPassword"
-  private val crnTest: String = "CRN00000001"
   private val htmlContentType: String = "text/html"
 
   "InputPassword GET" should {
@@ -57,22 +56,9 @@ class PasswordControllerSpec extends AbstractTest {
       val result: Future[Result] = controller.InputPassword(isUpdate=false).apply(fakeRequestGET)
       contentType(result) shouldBe Some(htmlContentType)
     }
-    "return redirect home" in {
-      val result: Future[Result] = controller.InputPassword(isUpdate=false).apply(
-        fakeRequestGET.withSession(SessionKeys.crn -> crnTest))
-      status(result) shouldBe Status.SEE_OTHER
-    }
   }
 
   "SubmitInputPassword POST" should {
-    "return redirect home" in {
-      val result: Future[Result] = controller.SubmitInputPassword(isUpdate=false).apply(fakeRequestPOST
-        .withSession(
-          SessionKeys.crn -> crnTest,
-          SessionKeys.password -> passwordValue,
-          UserClientProperties.passwordCheck -> passwordValue))
-      status(result) shouldBe Status.SEE_OTHER
-    }
     "return 303" in {
       val result = controller.SubmitInputPassword(isUpdate=false).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.password -> passwordValue,

@@ -19,6 +19,7 @@ package uk.gov.hmrc.examplefrontend.controllers
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.examplefrontend.Connector.RegistrationConnector
+import uk.gov.hmrc.examplefrontend.common.Utils.{loggedInCheck, loggedInCheckAsync}
 import uk.gov.hmrc.examplefrontend.common.{ErrorMessages, SessionKeys}
 import uk.gov.hmrc.examplefrontend.config.ErrorHandler
 import uk.gov.hmrc.examplefrontend.model.{User, UserProperty}
@@ -39,9 +40,7 @@ class SummaryController @Inject()(
   extends FrontendController(mcc) with I18nSupport {
 
   def Summary(isUpdate:Boolean): Action[AnyContent] = Action { implicit request =>
-    if (request.session.get(SessionKeys.crn).isDefined) {
-      Redirect(routes.RegistrationController.home())
-    } else {
+    loggedInCheck{ () =>
       request.session
       val name: String = request.session.get(SessionKeys.name).getOrElse("")
       val business: String = request.session.get(SessionKeys.businessName).getOrElse("")
@@ -55,9 +54,7 @@ class SummaryController @Inject()(
   }
 
   def SummarySubmit: Action[AnyContent] = Action async { implicit request =>
-    if (request.session.get(SessionKeys.crn).isDefined) {
-      Future(Redirect(routes.RegistrationController.home()))
-    } else {
+    loggedInCheckAsync{ () =>
       val name: String = request.session.get(SessionKeys.name).getOrElse("")
       val businessName: String = request.session.get(SessionKeys.businessName).getOrElse("")
       val contactNumber: String = request.session.get(SessionKeys.contactNumber).getOrElse("")

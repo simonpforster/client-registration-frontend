@@ -45,7 +45,6 @@ class BusinessTypeControllerSpec extends AbstractTest {
   )
 
   private val businessTypeValue: String = "Private Limited"
-  private val crnTest: String = "CRN00000001"
   private val htmlContentType: String = "text/html"
 
   "InputBusinessType GET" should {
@@ -57,21 +56,9 @@ class BusinessTypeControllerSpec extends AbstractTest {
       val result: Future[Result] = controller.InputBusinessType(isUpdate=false).apply(fakeRequestGET)
       contentType(result) shouldBe Some(htmlContentType)
     }
-    "return redirect home" in {
-      val result: Future[Result] = controller.InputBusinessType(isUpdate=false).apply(
-        fakeRequestGET.withSession(SessionKeys.crn -> crnTest)
-      )
-      status(result) shouldBe Status.SEE_OTHER
-    }
   }
 
   "SubmitInputBusinessType POST" should {
-    "return redirect home" in {
-      val result: Future[Result] = controller.SubmitInputBusinessType(isUpdate=false).apply(fakeRequestPOST.withSession(
-        SessionKeys.crn -> crnTest,
-        SessionKeys.businessType -> businessTypeValue))
-      status(result) shouldBe Status.SEE_OTHER
-    }
     "return redirect Summary" in {
       val result: Future[Result] = controller.SubmitInputBusinessType(isUpdate=true).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.businessType -> businessTypeValue))

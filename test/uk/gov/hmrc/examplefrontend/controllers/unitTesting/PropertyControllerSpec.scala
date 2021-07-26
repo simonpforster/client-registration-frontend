@@ -49,7 +49,6 @@ class PropertyControllerSpec extends AbstractTest {
 
   private val propertyNumberValue: String = "TestPropertyNumber"
   private val postcodeValue: String = "HA8 7EY"
-  private val crnTest: String = "CRN00000001"
   private val htmlContentType: String = "text/html"
 
   "InputProperty GET" should {
@@ -61,11 +60,6 @@ class PropertyControllerSpec extends AbstractTest {
       val result: Future[Result] = controller.InputProperty(isUpdate=false).apply(fakeRequestGET)
       contentType(result) shouldBe Some(htmlContentType)
     }
-    "return redirect home" in {
-      val result: Future[Result] = controller.InputProperty(isUpdate=false).apply(
-        fakeRequestGET.withSession(SessionKeys.crn -> crnTest))
-      status(result) shouldBe Status.SEE_OTHER
-    }
     "pre populate the form with session" in {
       val result: Future[Result] = controller.InputProperty(isUpdate=false).apply(fakeRequestGET.withSession(
         SessionKeys.property -> UserProperty(propertyNumberValue, postcodeValue).encode()))
@@ -76,12 +70,6 @@ class PropertyControllerSpec extends AbstractTest {
   }
 
   "SubmitInputProperty POST" should {
-    "return redirect home" in {
-      val result: Future[Result] = controller.SubmitInputProperty(isUpdate=false).apply(fakeRequestPOST.withSession(
-        SessionKeys.crn -> crnTest,
-        SessionKeys.property -> UserProperty(propertyNumberValue, postcodeValue).encode()))
-      status(result) shouldBe Status.SEE_OTHER
-    }
     "return redirect Summary" in {
       val result: Future[Result] = controller.SubmitInputProperty(isUpdate=true).apply(fakeRequestPOST.withFormUrlEncodedBody(
         UserClientProperties.propertyNumber -> propertyNumberValue,
